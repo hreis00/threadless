@@ -8,6 +8,9 @@ dependencies:
   bcryptjs:
     specifier: ^2.4.3
     version: 2.4.3
+  cloudinary:
+    specifier: ^2.2.0
+    version: 2.2.0
   cookie-parser:
     specifier: ^1.4.6
     version: 1.4.6
@@ -156,6 +159,14 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
+
+  /cloudinary@2.2.0:
+    resolution: {integrity: sha512-akbLTZcNegGSkl07Frnt9fyiK9KZ2zPS+a+j7uLrjNYxVhDpDdIBz9G6snPCYqgk+WLVMRPfXTObalLr5L6g0Q==}
+    engines: {node: '>=9'}
+    dependencies:
+      lodash: 4.17.21
+      q: 1.5.1
+    dev: false
 
   /concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
@@ -539,6 +550,10 @@ packages:
     resolution: {integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==}
     dev: false
 
+  /lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: false
+
   /media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
     engines: {node: '>= 0.6'}
@@ -739,6 +754,11 @@ packages:
   /punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
+    dev: false
+
+  /q@1.5.1:
+    resolution: {integrity: sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==}
+    engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     dev: false
 
   /qs@6.11.0:
