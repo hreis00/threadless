@@ -4,6 +4,9 @@ import { v2 as cloudinary } from "cloudinary";
 import User from "../models/user.model.js";
 import Notification from "../models/notification.model.js";
 
+// @desc    Get user profile
+// @route   POST /api/users/profile/:username
+// @access  Private
 export const getUserProfile = async (req, res) => {
   const { username } = req.params;
 
@@ -19,6 +22,9 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
+// @desc    Follow or Unfollow user
+// @route   POST /api/users/follow/:id
+// @access  Private
 export const followUnfollowUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -63,6 +69,9 @@ export const followUnfollowUser = async (req, res) => {
   }
 };
 
+// @desc    Get suggested users
+// @route   POST /api/users/suggested
+// @access  Private
 export const getSuggestedUsers = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -83,6 +92,9 @@ export const getSuggestedUsers = async (req, res) => {
   }
 };
 
+// @desc    Update user profile
+// @route   POST /api/users/update
+// @access  Private
 export const updateUserProfile = async (req, res) => {
   const { fullName, username, email, currentPassword, newPassword, bio, link } =
     req.body;
