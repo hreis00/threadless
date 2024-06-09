@@ -100,9 +100,9 @@ const Post = ({ post }) => {
           </div>
           <div className="flex flex-col gap-3 overflow-hidden">
             <span>{post.text}</span>
-            {post.img && (
+            {post.image && (
               <img
-                src={post.img}
+                src={post.image}
                 className="object-contain border border-gray-700 rounded-lg h-80"
                 alt=""
               />

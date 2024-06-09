@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 
 const CreatePost = () => {
   const [text, setText] = useState("");
-  const [img, setImg] = useState(null);
+  const [image, setImage] = useState(null);
   const imgRef = useRef(null);
 
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
@@ -29,7 +29,7 @@ const CreatePost = () => {
           },
           body: JSON.stringify({
             text,
-            img,
+            image,
           }),
         });
 
@@ -44,7 +44,7 @@ const CreatePost = () => {
     },
     onSuccess: () => {
       setText("");
-      setImg(null);
+      setImage(null);
       toast.success("Post created successfully");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
@@ -52,7 +52,7 @@ const CreatePost = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createPost({ text, img });
+    createPost({ text, image });
   };
 
   const handleImgChange = (e) => {
@@ -60,7 +60,7 @@ const CreatePost = () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImg(reader.result);
+        setImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -80,17 +80,17 @@ const CreatePost = () => {
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        {img && (
+        {image && (
           <div className="relative mx-auto w-72">
             <IoCloseSharp
               className="absolute top-0 right-0 w-5 h-5 text-white bg-gray-800 rounded-full cursor-pointer"
               onClick={() => {
-                setImg(null);
+                setImage(null);
                 imgRef.current.value = null;
               }}
             />
             <img
-              src={img}
+              src={image}
               className="object-contain w-full mx-auto rounded h-72"
             />
           </div>
@@ -115,7 +115,7 @@ const CreatePost = () => {
             {isPending ? "Posting..." : "Post"}
           </button>
         </div>
-        {isError && <div className="text-red-500">{error}</div>}
+        {isError && <div className="text-red-500">{error.message}</div>}
       </form>
     </div>
   );
