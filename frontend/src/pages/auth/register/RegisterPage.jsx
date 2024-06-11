@@ -42,8 +42,7 @@ const RegisterPage = () => {
 
         return data;
       } catch (error) {
-        console.log(error);
-        throw error;
+        throw new Error(error);
       }
     },
     onSuccess: () => {
