@@ -22,9 +22,8 @@ function App() {
         const data = await res.json();
         if (data.error) return null;
 
-        if (!res.ok) {
-          throw new Error(data.error || "Something went wrong");
-        }
+        if (!res.ok) throw new Error(data.error || "Something went wrong");
+
         console.log("authUser:", data);
         return data;
       } catch (error) {
