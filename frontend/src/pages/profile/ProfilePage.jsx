@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import Posts from "../../components/common/Posts";
 import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
@@ -14,17 +14,24 @@ import { FaLink } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { formatMemberSinceDate } from "../../utils/date";
 
+import useFollow from "../../hooks/useFollow";
+import toast from "react-hot-toast";
+
 const ProfilePage = () => {
-  const [coverImg, setCoverImg] = useState(null);
-  const [profileImg, setProfileImg] = useState(null);
+  const [coverImage, setcoverImage] = useState(null);
+  const [profileImage, setprofileImage] = useState(null);
   const [feedType, setFeedType] = useState("posts");
 
-  const coverImgRef = useRef(null);
-  const profileImgRef = useRef(null);
+  const coverImageRef = useRef(null);
+  const profileImageRef = useRef(null);
 
   const { username } = useParams();
 
-  const isMyProfile = true;
+  const { follow, isPending } = useFollow();
+
+  const queryClient = useQueryClient();
+
+  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 
   const {
     data: user,
@@ -45,15 +52,52 @@ const ProfilePage = () => {
     },
   });
 
+  const { mutate: updateProfile, isPending: isUpdatingProfile } = useMutation({
+    mutationFn: async () => {
+      try {
+        const res = await fetch(`/api/users/update`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            coverImage,
+            profileImage,
+          }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Something went wrong");
+        return data;
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    onSuccess: () => {
+      toast.success("Profile updated successfully");
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["authUser"] }),
+        queryClient.invalidateQueries({ queryKey: ["userProfile"] }),
+      ]);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const isMyProfile = authUser._id === user?._id;
+
   const memberSinceDate = formatMemberSinceDate(user?.createdAt);
+
+  const amIFollowing = authUser?.following.includes(user?._id);
 
   const handleImgChange = (e, state) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        state === "coverImg" && setCoverImg(reader.result);
-        state === "profileImg" && setProfileImg(reader.result);
+        state === "coverImage" && setcoverImage(reader.result);
+        state === "profileImage" && setprofileImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -88,14 +132,14 @@ const ProfilePage = () => {
               {/* COVER IMG */}
               <div className="relative group/cover">
                 <img
-                  src={coverImg || user?.coverImg || "/cover.png"}
+                  src={coverImage || user?.coverImage || "/cover.png"}
                   className="object-cover w-full h-52"
                   alt="cover image"
                 />
                 {isMyProfile && (
                   <div
                     className="absolute p-2 transition duration-200 bg-gray-800 bg-opacity-75 rounded-full opacity-0 cursor-pointer top-2 right-2 group-hover/cover:opacity-100"
-                    onClick={() => coverImgRef.current.click()}
+                    onClick={() => coverImageRef.current.click()}
                   >
                     <MdEdit className="w-5 h-5 text-white" />
                   </div>
@@ -105,23 +149,23 @@ const ProfilePage = () => {
                   type="file"
                   accept="image/*"
                   hidden
-                  ref={coverImgRef}
-                  onChange={(e) => handleImgChange(e, "coverImg")}
+                  ref={coverImageRef}
+                  onChange={(e) => handleImgChange(e, "coverImage")}
                 />
                 <input
                   type="file"
                   accept="image/*"
                   hidden
-                  ref={profileImgRef}
-                  onChange={(e) => handleImgChange(e, "profileImg")}
+                  ref={profileImageRef}
+                  onChange={(e) => handleImgChange(e, "profileImage")}
                 />
                 {/* USER AVATAR */}
                 <div className="absolute avatar -bottom-16 left-4">
                   <div className="relative w-32 rounded-full group/avatar">
                     <img
                       src={
-                        profileImg ||
-                        user?.profileImg ||
+                        profileImage ||
+                        user?.profileImage ||
                         "/avatar-placeholder.png"
                       }
                     />
@@ -129,7 +173,7 @@ const ProfilePage = () => {
                       {isMyProfile && (
                         <MdEdit
                           className="w-4 h-4 text-white"
-                          onClick={() => profileImgRef.current.click()}
+                          onClick={() => profileImageRef.current.click()}
                         />
                       )}
                     </div>
@@ -137,21 +181,23 @@ const ProfilePage = () => {
                 </div>
               </div>
               <div className="flex justify-end px-4 mt-5">
-                {isMyProfile && <EditProfileModal />}
+                {isMyProfile && <EditProfileModal authUser={authUser} />}
                 {!isMyProfile && (
                   <button
                     className="rounded-full btn btn-outline btn-sm"
-                    onClick={() => alert("Followed successfully")}
+                    onClick={() => follow(user?._id)}
                   >
-                    Follow
+                    {isPending && "Loading..."}
+                    {!isPending && amIFollowing && "Unfollow"}
+                    {!isPending && !amIFollowing && "Follow"}
                   </button>
                 )}
-                {(coverImg || profileImg) && (
+                {(coverImage || profileImage) && (
                   <button
                     className="px-4 ml-2 text-white rounded-full btn btn-primary btn-sm"
-                    onClick={() => alert("Profile updated successfully")}
+                    onClick={() => updateProfile()}
                   >
-                    Update
+                    {isUpdatingProfile ? "Updating..." : "Update"}
                   </button>
                 )}
               </div>
