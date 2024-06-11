@@ -31,6 +31,7 @@ const EditProfileModal = ({ authUser }) => {
       });
     }
   }, [authUser]);
+
   return (
     <>
       <button
