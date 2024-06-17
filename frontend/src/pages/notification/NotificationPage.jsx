@@ -5,7 +5,7 @@ import LoadingSpinner from "../../components/common/LoadingSpinner";
 import toast from "react-hot-toast";
 
 import { IoSettingsOutline } from "react-icons/io5";
-import { FaUser } from "react-icons/fa";
+import { FaRegBookmark, FaUser } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
 
 const NotificationPage = () => {
@@ -78,10 +78,16 @@ const NotificationPage = () => {
           <div className="border-b border-gray-700" key={notification._id}>
             <div className="flex gap-2 p-4">
               {notification.type === "follow" && (
-                <FaUser className="w-7 h-7 text-primary" />
+                <FaUser className="w-5 h-5 text-primary" />
               )}
               {notification.type === "like" && (
-                <FaHeart className="text-red-500 w-7 h-7" />
+                <FaHeart className="w-5 h-5 text-red-500" />
+              )}
+              {notification.type === "comment" && (
+                <FaHeart className="w-5 h-5 text-red-500" />
+              )}
+              {notification.type === "bookmark" && (
+                <FaRegBookmark className="w-5 h-5 text-yellow-600" />
               )}
               <Link to={`/profile/${notification.from.username}`}>
                 <div className="avatar">
@@ -97,10 +103,25 @@ const NotificationPage = () => {
                 <div className="flex gap-1">
                   <span className="font-bold">
                     @{notification.from.username}
-                  </span>{" "}
-                  {notification.type === "follow"
-                    ? "followed you"
-                    : "liked your post"}
+                  </span>
+                  {["follow", "like", "comment", "bookmark"].includes(
+                    notification.type
+                  ) && (
+                    <div>
+                      {notification.type === "follow" && (
+                        <span>followed you!</span>
+                      )}
+                      {notification.type === "like" && (
+                        <span>liked your post!</span>
+                      )}
+                      {notification.type === "comment" && (
+                        <span>commented on your post!</span>
+                      )}
+                      {notification.type === "bookmark" && (
+                        <span>bookmarked your post!</span>
+                      )}
+                    </div>
+                  )}
                 </div>
               </Link>
             </div>

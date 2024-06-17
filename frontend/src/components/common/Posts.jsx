@@ -19,6 +19,8 @@ const Posts = ({ feedType, username, userId }) => {
         return `/api/users`;
       case "mostRecent":
         return `/api/posts/all`;
+      case "bookmarks":
+        return `/api/posts/bookmarks/${userId}`;
       default:
         return "/api/posts/all";
     }

@@ -241,6 +241,15 @@ const ProfilePage = () => {
                     <div className="absolute bottom-0 w-10 h-1 rounded-full bg-primary" />
                   )}
                 </div>
+                <div
+                  className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-secondary"
+                  onClick={() => setFeedType("bookmarks")}
+                >
+                  Bookmarks
+                  {feedType === "bookmarks" && (
+                    <div className="absolute bottom-0 w-10 h-1 rounded-full bg-primary" />
+                  )}
+                </div>
               </div>
             </>
           )}

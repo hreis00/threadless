@@ -22,6 +22,8 @@ const Post = ({ post }) => {
   const isMyPost = authUser._id === post.user._id;
   const formattedDate = formatPostDate(post.createdAt);
 
+  const isBookmarked = post.bookmarks.includes(authUser._id);
+
   const queryClient = useQueryClient();
 
   const { mutate: deletePost, isPending: isDeleting } = useMutation({
@@ -46,7 +48,7 @@ const Post = ({ post }) => {
     },
   });
 
-  const { mutate: likePost, isPending: isLinking } = useMutation({
+  const { mutate: likePost, isPending: isLiking } = useMutation({
     mutationFn: async () => {
       try {
         const res = await fetch(`/api/posts/like/${post._id}`, {
@@ -111,6 +113,43 @@ const Post = ({ post }) => {
     },
   });
 
+  const { mutate: bookmarkPost, isPending: isBookmarking } = useMutation({
+    mutationFn: async () => {
+      try {
+        const res = await fetch(`/api/posts/bookmark/${post._id}`, {
+          method: "POST",
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Something went wrong");
+
+        return data;
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    onSuccess: (updatedBookmarks) => {
+      queryClient.setQueryData(["posts"], (oldData) => {
+        return oldData.map((p) => {
+          if (p._id === post._id) {
+            return {
+              ...p,
+              bookmarks: updatedBookmarks,
+            };
+          }
+          return p;
+        });
+      });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const handleBookmarkPost = () => {
+    if (isBookmarking) return;
+    bookmarkPost();
+  };
   const handleDeletePost = () => {
     deletePost();
   };
@@ -122,7 +161,7 @@ const Post = ({ post }) => {
   };
 
   const handleLikePost = () => {
-    if (isLinking) return;
+    if (isLiking) return;
     likePost();
   };
 
@@ -254,11 +293,11 @@ const Post = ({ post }) => {
                 className="flex items-center gap-1 cursor-pointer group"
                 onClick={handleLikePost}
               >
-                {isLinking && <LoadingSpinner size="sm" />}
-                {!isLiked && !isLinking && (
+                {isLiking && <LoadingSpinner size="sm" />}
+                {!isLiked && !isLiking && (
                   <FaRegHeart className="w-4 h-4 cursor-pointer text-slate-500 group-hover:text-pink-500" />
                 )}
-                {isLiked && !isLinking && (
+                {isLiked && !isLiking && (
                   <FaRegHeart className="w-4 h-4 text-pink-500 cursor-pointer " />
                 )}
 
@@ -271,8 +310,25 @@ const Post = ({ post }) => {
                 </span>
               </div>
             </div>
-            <div className="flex items-center justify-end w-1/3 gap-2">
-              <FaRegBookmark className="w-4 h-4 cursor-pointer text-slate-500" />
+            <div
+              className="flex items-center gap-1 cursor-pointer group"
+              onClick={handleBookmarkPost}
+            >
+              {isBookmarking && <LoadingSpinner size="sm" />}
+              {!isBookmarked && !isBookmarking && (
+                <FaRegBookmark className="w-4 h-4 cursor-pointer text-slate-500 group-hover:text-yellow-600" />
+              )}
+              {isBookmarked && !isBookmarking && (
+                <FaRegBookmark className="w-4 h-4 text-yellow-600 cursor-pointer" />
+              )}
+
+              <span
+                className={`text-sm group-hover:text-yellow-600 ${
+                  isBookmarked ? "text-yellow-600" : "text-slate-500"
+                }`}
+              >
+                {post.bookmarks.length}
+              </span>
             </div>
           </div>
         </div>
