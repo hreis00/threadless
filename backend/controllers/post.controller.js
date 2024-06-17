@@ -275,3 +275,88 @@ export const getUserPosts = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+// @desc    Bookmark/Unbookmark a post
+// @route   POST /api/posts/bookmark/:id
+// @access  Private
+export const bookmarkUnbookmarkPost = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { id: postId } = req.params;
+
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    const userBookmarkedPost = post.bookmarks.includes(userId);
+
+    if (userBookmarkedPost) {
+      // Unbookmark post
+      await Post.updateOne({ _id: postId }, { $pull: { bookmarks: userId } });
+      await User.updateOne(
+        { _id: userId },
+        { $pull: { bookmarkedPosts: postId } }
+      );
+
+      const updatedBookmarks = post.bookmarks.filter(
+        (id) => id.toString() !== userId.toString()
+      );
+
+      res.status(200).json(updatedBookmarks);
+    } else {
+      // Bookmark post
+      post.bookmarks.push(userId);
+      await User.updateOne(
+        { _id: userId },
+        { $push: { bookmarkedPosts: postId } }
+      );
+      await post.save();
+
+      const notification = Notification({
+        from: userId,
+        to: post.user,
+        type: "bookmark",
+      });
+      await notification.save();
+
+      const updatedBookmarks = post.bookmarks;
+      res.status(200).json(updatedBookmarks);
+    }
+  } catch (error) {
+    console.log("Error bookmarking/unbookmarking post:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// @desc    Get bookmarked posts
+// @route   GET /api/posts/bookmarks/:id
+// @access  Private
+export const getBookmarkedPosts = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const bookmarkedPosts = await Post.find({
+      _id: { $in: user.bookmarkedPosts },
+    })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-password",
+      });
+
+    res.status(200).json(bookmarkedPosts);
+  } catch (error) {
+    console.log("Error getting bookmarked posts:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
