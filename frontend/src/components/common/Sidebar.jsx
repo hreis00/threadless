@@ -9,6 +9,7 @@ import {
   MdNotifications,
   MdAccountCircle,
   MdOutlineLogout,
+  MdEvent,
 } from "react-icons/md";
 
 import toast from "react-hot-toast";
@@ -62,6 +63,15 @@ const Sidebar = () => {
             >
               <MdOutlineSearch className="w-8 h-8" />
               <span className="hidden text-lg md:block">Search</span>
+            </Link>
+          </li>
+          <li className="flex justify-center md:justify-start">
+            <Link
+              to="/"
+              className="flex items-center gap-3 py-2 pl-2 pr-4 transition-all duration-300 rounded-full cursor-pointer hover:bg-stone-900 max-w-fit"
+            >
+              <MdEvent className="w-8 h-8" />
+              <span className="hidden text-lg md:block">Events</span>
             </Link>
           </li>
           <li className="flex justify-center md:justify-start">
