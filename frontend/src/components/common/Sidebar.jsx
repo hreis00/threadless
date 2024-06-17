@@ -1,12 +1,15 @@
 import Tsvg from "../svgs/T";
 
-import { MdHomeFilled } from "react-icons/md";
-import { IoNotifications } from "react-icons/io5";
-import { FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { BiLogOut } from "react-icons/bi";
-
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import {
+  MdHomeFilled,
+  MdOutlineSearch,
+  MdNotifications,
+  MdAccountCircle,
+  MdOutlineLogout,
+} from "react-icons/md";
 
 import toast from "react-hot-toast";
 
@@ -54,20 +57,28 @@ const Sidebar = () => {
           </li>
           <li className="flex justify-center md:justify-start">
             <Link
+              to="/search"
+              className="flex items-center gap-3 py-2 pl-2 pr-4 transition-all duration-300 rounded-full cursor-pointer hover:bg-stone-900 max-w-fit"
+            >
+              <MdOutlineSearch className="w-8 h-8" />
+              <span className="hidden text-lg md:block">Search</span>
+            </Link>
+          </li>
+          <li className="flex justify-center md:justify-start">
+            <Link
               to="/notifications"
               className="flex items-center gap-3 py-2 pl-2 pr-4 transition-all duration-300 rounded-full cursor-pointer hover:bg-stone-900 max-w-fit"
             >
-              <IoNotifications className="w-6 h-6" />
+              <MdNotifications className="w-8 h-8" />
               <span className="hidden text-lg md:block">Notifications</span>
             </Link>
           </li>
-
           <li className="flex justify-center md:justify-start">
             <Link
               to={`/profile/${authUser?.username}`}
               className="flex items-center gap-3 py-2 pl-2 pr-4 transition-all duration-300 rounded-full cursor-pointer hover:bg-stone-900 max-w-fit"
             >
-              <FaUser className="w-6 h-6" />
+              <MdAccountCircle className="w-8 h-8" />
               <span className="hidden text-lg md:block">Profile</span>
             </Link>
           </li>
@@ -91,8 +102,8 @@ const Sidebar = () => {
                 </p>
                 <p className="text-sm text-slate-500">@{authUser?.username}</p>
               </div>
-              <BiLogOut
-                className="w-5 h-5 cursor-pointer"
+              <MdOutlineLogout
+                className="self-center w-5 h-5 cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault();
                   logout();

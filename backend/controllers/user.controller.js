@@ -90,6 +90,44 @@ export const getSuggestedUsers = async (req, res) => {
   }
 };
 
+// @desc    Get all users
+// @route   GET /api/users
+// @access  Private
+export const getAllUsers = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const users = await User.find({ _id: { $nin: userId } }).select(
+      "-password"
+    );
+    res.status(200).json(users);
+  } catch (error) {
+    console.log("Error getting all users:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// @desc    Search users
+// @route   GET /api/users/search/:query
+// @access  Private
+export const searchUsers = async (req, res) => {
+  try {
+    const query = req.params.query;
+    const userId = req.user._id;
+    const users = await User.find({
+      $or: [
+        { fullName: { $regex: query, $options: "i" } },
+        { username: { $regex: query, $options: "i" } },
+      ],
+    })
+      .where({ _id: { $nin: userId } })
+      .select("-password");
+    res.status(200).json(users);
+  } catch (error) {
+    console.log("Error searching users:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // @desc    Update user profile
 // @route   POST /api/users/update
 // @access  Private

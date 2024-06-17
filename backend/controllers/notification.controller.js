@@ -1,5 +1,8 @@
 import Notification from "../models/notification.model.js";
 
+// @desc    Get all notifications
+// @route   GET /api/notifications
+// @access  Private
 export const getNotifications = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -20,6 +23,9 @@ export const getNotifications = async (req, res) => {
   }
 };
 
+// @desc    Delete all notifications
+// @route   DELETE /api/notifications
+// @access  Private
 export const deleteNotifications = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -33,6 +39,9 @@ export const deleteNotifications = async (req, res) => {
   }
 };
 
+// @desc    Delete a notification
+// @route   DELETE /api/notifications/:id
+// @access  Private
 export const deleteNotification = async (req, res) => {
   try {
     const notificationId = req.params.id;

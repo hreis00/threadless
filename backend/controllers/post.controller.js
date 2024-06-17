@@ -3,6 +3,31 @@ import Post from "../models/post.model.js";
 import { v2 as cloudinary } from "cloudinary";
 import Notification from "../models/notification.model.js";
 
+// @desc    Search posts
+// @route   GET /api/posts/search/:query
+// @access  Private
+export const searchPosts = async (req, res) => {
+  try {
+    const query = req.params.query;
+    const userId = req.user._id;
+    const posts = await Post.find({
+      $or: [
+        { fullName: { $regex: query, $options: "i" } },
+        { username: { $regex: query, $options: "i" } },
+        { text: { $regex: query, $options: "i" } },
+      ],
+    }).where({ _id: { $nin: userId } });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.log("Error searching posts:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// @desc    Get all posts
+// @route   GET /api/posts/all
+// @access  Private
 export const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find()
@@ -20,6 +45,9 @@ export const getAllPosts = async (req, res) => {
   }
 };
 
+// @desc    Create a post
+// @route   POST /api/posts/create
+// @access  Private
 export const createPost = async (req, res) => {
   try {
     const { text } = req.body;
@@ -54,6 +82,9 @@ export const createPost = async (req, res) => {
   }
 };
 
+// @desc    Delete a post
+// @route   DELETE /api/posts/:id
+// @access  Private
 export const deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -82,6 +113,9 @@ export const deletePost = async (req, res) => {
 };
 
 // TODO: Create notification
+// @desc    Comment a post
+// @route   POST /api/posts/comment/:id
+// @access  Private
 export const commentPost = async (req, res) => {
   try {
     const { text } = req.body;
@@ -104,6 +138,7 @@ export const commentPost = async (req, res) => {
 
     post.comments.push(comment);
     await post.save();
+
     res.status(200).json(post);
   } catch (error) {
     console.log("Error commenting post:", error);
@@ -111,6 +146,9 @@ export const commentPost = async (req, res) => {
   }
 };
 
+// @desc    Like/Unlike a post
+// @route   POST /api/posts/like/:id
+// @access  Private
 export const likeUnlikePost = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -140,12 +178,12 @@ export const likeUnlikePost = async (req, res) => {
       await User.updateOne({ _id: userId }, { $push: { likedPosts: postId } });
       await post.save();
 
-      const notificaiton = Notification({
+      const notification = Notification({
         from: userId,
         to: post.user,
         type: "like",
       });
-      await notificaiton.save();
+      await notification.save();
 
       const updatedLikes = post.likes;
       res.status(200).json(updatedLikes);
@@ -156,6 +194,9 @@ export const likeUnlikePost = async (req, res) => {
   }
 };
 
+// @desc    Get liked posts
+// @route   GET /api/posts/likes/:id
+// @access  Private
 export const getLikedPosts = async (req, res) => {
   const userId = req.params.id;
 
@@ -184,6 +225,9 @@ export const getLikedPosts = async (req, res) => {
   }
 };
 
+// @desc    Get following posts
+// @route   GET /api/posts/following
+// @access  Private
 export const getFollowingPosts = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -208,6 +252,9 @@ export const getFollowingPosts = async (req, res) => {
   }
 };
 
+// @desc    Get user posts
+// @route   GET /api/posts/user/:username
+// @access  Private
 export const getUserPosts = async (req, res) => {
   try {
     const { username } = req.params;

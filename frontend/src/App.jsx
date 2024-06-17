@@ -3,11 +3,12 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
 import RegisterPage from "./pages/auth/register/RegisterPage";
 import LoginPage from "./pages/auth/login/LoginPage";
+import SearchPage from "./pages/search/SearchPage";
 import NotificationPage from "./pages/notification/NotificationPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 
 import Sidebar from "./components/common/Sidebar";
-import RightPanel from "./components/common/RightPanel";
+// import RightPanel from "./components/common/RightPanel";
 
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
@@ -57,6 +58,10 @@ function App() {
           element={!authUser ? <LoginPage /> : <Navigate to="/" />}
         />
         <Route
+          path="/search"
+          element={authUser ? <SearchPage /> : <Navigate to="/login" />}
+        />
+        <Route
           path="/notifications"
           element={authUser ? <NotificationPage /> : <Navigate to="/login" />}
         />
@@ -65,7 +70,7 @@ function App() {
           element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
         />
       </Routes>
-      {authUser && <RightPanel />}
+      {/* {authUser && <RightPanel />} */}
       <Toaster />
     </div>
   );

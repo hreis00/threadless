@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
 
+// TODO: Accept empty strings to bio and link
 const EditProfileModal = ({ authUser }) => {
   const [formData, setFormData] = useState({
     fullName: "",

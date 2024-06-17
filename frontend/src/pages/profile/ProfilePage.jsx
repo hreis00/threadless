@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 import Posts from "../../components/common/Posts";
 import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
@@ -18,6 +19,7 @@ import useFollow from "../../hooks/useFollow";
 import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
   const [coverImage, setcoverImage] = useState(null);
   const [profileImage, setprofileImage] = useState(null);
   const [feedType, setFeedType] = useState("posts");
@@ -86,9 +88,9 @@ const ProfilePage = () => {
           {!isLoading && !isRefetching && user && (
             <>
               <div className="flex items-center gap-10 px-4 py-2">
-                <Link to="/">
+                <button onClick={() => navigate(-1)}>
                   <FaArrowLeft className="w-4 h-4" />
-                </Link>
+                </button>
                 <div className="flex flex-col">
                   <p className="text-lg font-bold">{user?.fullName}</p>
                   <span className="text-sm text-slate-500">
@@ -188,7 +190,7 @@ const ProfilePage = () => {
                       <>
                         <FaLink className="w-3 h-3 text-slate-500" />
                         <a
-                          href="https://youtube.com/@asaprogrammer_"
+                          href={`${user?.link}`}
                           target="_blank"
                           rel="noreferrer"
                           className="text-sm text-blue-500 hover:underline"
@@ -231,7 +233,7 @@ const ProfilePage = () => {
                   )}
                 </div>
                 <div
-                  className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer text-slate-500 hover:bg-secondary"
+                  className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-secondary"
                   onClick={() => setFeedType("likes")}
                 >
                   Likes
