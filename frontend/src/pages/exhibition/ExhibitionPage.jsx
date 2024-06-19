@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import Exhibition from "../../components/common/Exhibition";
 
 const ExhibitionPage = () => {
   const { slug } = useParams();
@@ -20,9 +19,31 @@ const ExhibitionPage = () => {
   });
 
   return (
-    <div className="w-full">
-      {exhibition && <Exhibition exhibition={exhibition} />}
-    </div>
+    <>
+      {exhibition && (
+        <div className="flex items-start gap-2 p-4 border-b border-gray-700">
+          <div className="flex flex-col flex-1">
+            <div className="flex flex-col items-start gap-2 p-4 border-gray-700">
+              <div className="flex items-center gap-2">
+                <span className="font-bold">{exhibition.name}</span>
+                <span className="flex gap-1 text-sm text-gray-700">
+                  <span>·</span>
+                  {/* <span>{formattedDate}</span> */}
+                </span>
+              </div>
+              <span className="text-sm">{exhibition.description}</span>
+              {exhibition.image && (
+                <img
+                  src={exhibition.image}
+                  className="self-center object-contain border border-gray-700 rounded-lg h-80"
+                  alt=""
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

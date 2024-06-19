@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -197,27 +197,29 @@ const ProfilePage = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  {user?.link && (
+                  {/* {user?.link && (
                     <div className="flex items-center gap-1 ">
-                      <>
-                        <FaLink className="w-3 h-3 text-slate-500" />
-                        <a
-                          href={`${user?.link}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-sm text-blue-500 hover:underline"
-                        >
-                          {user?.link}
-                        </a>
-                      </>
+                      <FaLink className="w-3 h-3 text-slate-500" />
+                      <Link
+                        to={user?.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-sm text-blue-500 hover:underline"
+                        onClick={(e) => {
+                          e.preventDefault(); // Prevent the default link behavior
+                          window.location.href = user?.link; // Redirect to the link
+                        }}
+                      >
+                        {user?.link}
+                      </Link>
                     </div>
-                  )}
-                  <div className="flex items-center gap-2">
+                  )} */}
+                  {/* <div className="flex items-center gap-2">
                     <IoCalendarOutline className="w-4 h-4 text-slate-500" />
                     <span className="text-sm text-slate-500">
                       {memberSinceDate}
                     </span>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex gap-2">
                   <div className="flex items-center gap-1">

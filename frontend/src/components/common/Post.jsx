@@ -1,5 +1,4 @@
 import { FaRegComment } from "react-icons/fa";
-import { BiRepost } from "react-icons/bi";
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
@@ -213,8 +212,8 @@ const Post = ({ post }) => {
               )}
             </Link>
           </div>
-          <div className="flex justify-between mt-3">
-            <div className="flex items-center justify-between w-2/3 gap-4">
+          <div className="flex gap-4 mt-3">
+            <div className="flex items-center gap-4">
               <div
                 className="flex items-center gap-1 cursor-pointer group"
                 onClick={() =>
@@ -285,12 +284,6 @@ const Post = ({ post }) => {
                   <button className="outline-none">close</button>
                 </form>
               </dialog>
-              <div className="flex items-center gap-1 cursor-pointer group">
-                <BiRepost className="w-6 h-6 text-slate-500 group-hover:text-green-500" />
-                <span className="text-sm text-slate-500 group-hover:text-green-500">
-                  0
-                </span>
-              </div>
               <div
                 className="flex items-center gap-1 cursor-pointer group"
                 onClick={handleLikePost}

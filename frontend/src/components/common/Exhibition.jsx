@@ -55,13 +55,15 @@ const Exhibition = ({ exhibition }) => {
                 </span>
               </div>
               <span className="text-sm">{exhibition.description}</span>
-              {exhibition.image && (
-                <img
-                  src={exhibition.image}
-                  className="object-contain border border-gray-700 rounded-lg h-80"
-                  alt=""
-                />
-              )}
+              <div className="py-2">
+                {exhibition.image && (
+                  <img
+                    src={exhibition.image}
+                    className="object-contain mx-auto border border-gray-700 rounded-lg h-80"
+                    alt={exhibition.name}
+                  />
+                )}
+              </div>
             </Link>
             <div className="self-stretch flex-1 p-1">
               {authUser && authUser.isAdmin && (
