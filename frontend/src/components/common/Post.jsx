@@ -5,12 +5,13 @@ import { FaRegBookmark } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import toast from "react-hot-toast";
 
 import LoadingSpinner from "./LoadingSpinner";
-import { formatPostDate } from "../../utils/date";
+// import { formatPostDate } from "../../utils/date";
 
 const Post = ({ post }) => {
   const [comment, setComment] = useState("");
@@ -20,7 +21,7 @@ const Post = ({ post }) => {
   const postOwner = post.user;
   const isLiked = post.likes.includes(authUser._id);
   const isMyPost = authUser._id === post.user._id;
-  const formattedDate = formatPostDate(post.createdAt);
+  // const formattedDate = formatPostDate(post.createdAt);
 
   const isBookmarked = post.bookmarks.includes(authUser._id);
 
@@ -169,12 +170,11 @@ const Post = ({ post }) => {
     <>
       <div className="flex items-start gap-2 p-4 border-b border-gray-700">
         <div className="avatar">
-          <Link
-            to={`/profile/${postOwner.username}`}
-            className="w-8 overflow-hidden rounded-full"
-          >
-            <img src={postOwner.profileImage || "/avatar-placeholder.png"} />
-          </Link>
+          <div className="w-8 rounded-full">
+            <Link to={`/profile/${postOwner.username}`} className="">
+              <img src={postOwner.profileImage || "/avatar-placeholder.png"} />
+            </Link>
+          </div>
         </div>
         <div className="flex flex-col flex-1">
           <div className="flex items-center gap-2">
@@ -186,7 +186,7 @@ const Post = ({ post }) => {
                 @{postOwner.username}
               </Link>
               <span>·</span>
-              <span>{formattedDate}</span>
+              {/* <span>{formattedDate}</span> */}
             </span>
             {isMyPost && (
               <span className="flex justify-end flex-1">
@@ -202,14 +202,16 @@ const Post = ({ post }) => {
             )}
           </div>
           <div className="flex flex-col gap-3 overflow-hidden">
-            <span>{post.text}</span>
-            {post.image && (
-              <img
-                src={post.image}
-                className="object-contain border border-gray-700 rounded-lg h-80"
-                alt=""
-              />
-            )}
+            <Link to={`/post/${post._id}`}>
+              <span>{post.text}</span>
+              {post.image && (
+                <img
+                  src={post.image}
+                  className="object-contain border border-gray-700 rounded-lg h-80"
+                  alt=""
+                />
+              )}
+            </Link>
           </div>
           <div className="flex justify-between mt-3">
             <div className="flex items-center justify-between w-2/3 gap-4">
@@ -321,14 +323,15 @@ const Post = ({ post }) => {
               {isBookmarked && !isBookmarking && (
                 <FaRegBookmark className="w-4 h-4 text-yellow-600 cursor-pointer" />
               )}
-
-              <span
-                className={`text-sm group-hover:text-yellow-600 ${
-                  isBookmarked ? "text-yellow-600" : "text-slate-500"
-                }`}
-              >
-                {post.bookmarks.length}
-              </span>
+              {isMyPost && (
+                <span
+                  className={`text-sm group-hover:text-yellow-600 ${
+                    isBookmarked ? "text-yellow-600" : "text-slate-500"
+                  }`}
+                >
+                  {post.bookmarks.length}
+                </span>
+              )}
             </div>
           </div>
         </div>

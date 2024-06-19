@@ -132,8 +132,16 @@ export const searchUsers = async (req, res) => {
 // @route   POST /api/users/update
 // @access  Private
 export const updateUserProfile = async (req, res) => {
-  const { fullName, username, email, currentPassword, newPassword, bio, link } =
-    req.body;
+  const {
+    isAdmin,
+    fullName,
+    username,
+    email,
+    currentPassword,
+    newPassword,
+    bio,
+    link,
+  } = req.body;
 
   let { profileImage, coverImage } = req.body;
 
@@ -188,6 +196,7 @@ export const updateUserProfile = async (req, res) => {
       coverImage = uploadedResponse.secure_url;
     }
 
+    user.isAdmin = isAdmin || user.isAdmin;
     user.fullName = fullName || user.fullName;
     user.username = username || user.username;
     user.email = email || user.email;

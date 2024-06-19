@@ -13,6 +13,9 @@ import Sidebar from "./components/common/Sidebar";
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "./components/common/LoadingSpinner";
+import ExhibitionPage from "./pages/exhibition/ExhibitionPage";
+import ExhibitionsPage from "./pages/exhibition/ExhibitionsPage";
+import PostPage from "./pages/post/PostPage";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -60,6 +63,18 @@ function App() {
         <Route
           path="/search"
           element={authUser ? <SearchPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/post/:postId"
+          element={authUser ? <PostPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/exhibitions"
+          element={authUser ? <ExhibitionsPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/exhibition/:slug"
+          element={authUser ? <ExhibitionPage /> : <Navigate to="/login" />}
         />
         <Route
           path="/notifications"

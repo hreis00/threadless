@@ -11,3 +11,6 @@ Threadless is social media/art gallery that allows users to publish their artwor
 - [ ] Implement a bookmark feature.
 - [ ] Implement an events page, allowing users to view artists artworks.
 - [ ] Refine the search page, allowing users to search for other users/artists alongside artwork and future events.
+
+- [ ] Create exhibition/post page.
+- [ ] Check the exhibition/post slug.

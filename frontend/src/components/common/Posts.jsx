@@ -30,9 +30,9 @@ const Posts = ({ feedType, username, userId }) => {
 
   const {
     data: posts,
-    isLoading,
-    refetch,
-    isRefetching,
+    isLoading: isLoadingPosts,
+    refetch: refetchPosts,
+    isRefetching: isRefetchingPosts,
   } = useQuery({
     queryKey: ["posts"],
     queryFn: async () => {
@@ -50,22 +50,22 @@ const Posts = ({ feedType, username, userId }) => {
   });
 
   useEffect(() => {
-    refetch();
-  }, [feedType, refetch, username]);
+    refetchPosts();
+  }, [feedType, refetchPosts, username]);
 
   return (
     <>
-      {(isLoading || isRefetching) && (
+      {(isLoadingPosts || isRefetchingPosts) && (
         <div className="flex flex-col justify-center">
           <PostSkeleton />
           <PostSkeleton />
           <PostSkeleton />
         </div>
       )}
-      {!isLoading && !isRefetching && posts?.length === 0 && (
+      {!isLoadingPosts && !isRefetchingPosts && posts?.length === 0 && (
         <p className="my-4 text-center">No posts in this tab. Switch 👻</p>
       )}
-      {!isLoading && !isRefetching && posts && (
+      {!isLoadingPosts && !isRefetchingPosts && posts && (
         <div>
           {posts.map((post) => (
             <Post key={post._id} post={post} />

@@ -117,9 +117,8 @@ const SearchPage = () => {
       {searchUsers &&
         feedType === "people" &&
         searchUsers?.map((user) => (
-          <>
+          <div key={user._id}>
             <Link
-              key={user._id}
               to={`/profile/${user.username}`}
               className="flex items-center justify-between px-4 py-2 hover:bg-secondary"
             >
@@ -146,7 +145,7 @@ const SearchPage = () => {
                 isPending={isPending}
               />
             </Link>
-          </>
+          </div>
         ))}
 
       {/* Most Recent */}

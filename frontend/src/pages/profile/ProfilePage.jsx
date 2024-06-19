@@ -7,8 +7,6 @@ import Posts from "../../components/common/Posts";
 import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
 import EditProfileModal from "./EditProfileModal";
 
-import { POSTS } from "../../utils/db/dummy";
-
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
@@ -43,6 +41,20 @@ const ProfilePage = () => {
     queryFn: async () => {
       try {
         const res = await fetch(`/api/users/profile/${username}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Something went wrong");
+        return data;
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+  });
+
+  const { data: userPosts } = useQuery({
+    queryKey: ["userPosts"],
+    queryFn: async () => {
+      try {
+        const res = await fetch(`/api/posts/user/${username}`);
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Something went wrong");
         return data;
@@ -94,7 +106,7 @@ const ProfilePage = () => {
                 <div className="flex flex-col">
                   <p className="text-lg font-bold">{user?.fullName}</p>
                   <span className="text-sm text-slate-500">
-                    {POSTS?.length} posts
+                    {0 || userPosts?.length} posts
                   </span>
                 </div>
               </div>
@@ -241,15 +253,17 @@ const ProfilePage = () => {
                     <div className="absolute bottom-0 w-10 h-1 rounded-full bg-primary" />
                   )}
                 </div>
-                <div
-                  className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-secondary"
-                  onClick={() => setFeedType("bookmarks")}
-                >
-                  Bookmarks
-                  {feedType === "bookmarks" && (
-                    <div className="absolute bottom-0 w-10 h-1 rounded-full bg-primary" />
-                  )}
-                </div>
+                {isMyProfile && (
+                  <div
+                    className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-secondary"
+                    onClick={() => setFeedType("bookmarks")}
+                  >
+                    Bookmarks
+                    {feedType === "bookmarks" && (
+                      <div className="absolute bottom-0 w-10 h-1 rounded-full bg-primary" />
+                    )}
+                  </div>
+                )}
               </div>
             </>
           )}

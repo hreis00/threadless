@@ -45,6 +45,27 @@ export const getAllPosts = async (req, res) => {
   }
 };
 
+// @desc    Get a single post by ID
+// @route   GET /api/posts/:id
+// @access  Private
+export const getPostById = async (req, res) => {
+  const postId = req.params.id;
+  try {
+    const post = await Post.findById(postId)
+      .populate({ path: "user", select: "-password" })
+      .populate({ path: "comments.user", select: "-password" });
+
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    res.status(200).json(post);
+  } catch (error) {
+    console.log("Error getting post by ID:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // @desc    Create a post
 // @route   POST /api/posts/create
 // @access  Private

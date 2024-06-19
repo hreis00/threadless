@@ -9,7 +9,7 @@ import {
   MdNotifications,
   MdAccountCircle,
   MdOutlineLogout,
-  MdEvent,
+  MdMuseum,
 } from "react-icons/md";
 
 import toast from "react-hot-toast";
@@ -43,8 +43,8 @@ const Sidebar = () => {
   return (
     <div className="md:flex-[2_2_0] w-18 max-w-52">
       <div className="sticky top-0 left-0 flex flex-col w-20 h-screen border-r border-gray-700 md:w-full">
-        <Link to="/" className="flex justify-center md:justify-start">
-          <Tsvg className="w-12 h-12 px-2 rounded-full fill-white hover:bg-stone-900" />
+        <Link to="/" className="mx-auto w-fit">
+          <Tsvg className="w-12 h-12 px-2 fill-white hover:bg-stone-900" />
         </Link>
         <ul className="flex flex-col gap-3 mt-4">
           <li className="flex justify-center md:justify-start">
@@ -67,11 +67,11 @@ const Sidebar = () => {
           </li>
           <li className="flex justify-center md:justify-start">
             <Link
-              to="/"
+              to="/exhibitions"
               className="flex items-center gap-3 py-2 pl-2 pr-4 transition-all duration-300 rounded-full cursor-pointer hover:bg-stone-900 max-w-fit"
             >
-              <MdEvent className="w-8 h-8" />
-              <span className="hidden text-lg md:block">Events</span>
+              <MdMuseum className="w-8 h-8" />
+              <span className="hidden text-lg md:block">Exhibitions</span>
             </Link>
           </li>
           <li className="flex justify-center md:justify-start">

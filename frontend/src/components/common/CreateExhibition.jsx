@@ -3,10 +3,12 @@ import { useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import toast from "react-hot-toast";
 
-const CreatePost = () => {
-  const [text, setText] = useState("");
+const CreateExhibition = () => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const imgRef = useRef(null);
 
@@ -14,20 +16,21 @@ const CreatePost = () => {
   const queryClient = useQueryClient();
 
   const {
-    mutate: createPost,
+    mutate: createExhibition,
     isPending,
     isError,
     error,
   } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await fetch("/api/posts/create", {
+        const res = await fetch("/api/exhibitions/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            text,
+            name,
+            description,
             image,
           }),
         });
@@ -40,16 +43,17 @@ const CreatePost = () => {
       }
     },
     onSuccess: () => {
-      setText("");
+      setName("");
+      setDescription("");
       setImage(null);
-      toast.success("Post created successfully");
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      toast.success("Exhibition created successfully");
+      queryClient.invalidateQueries({ queryKey: ["exhibitions"] });
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createPost({ text, image });
+    createExhibition({ name, description, image });
   };
 
   const handleImgChange = (e) => {
@@ -73,9 +77,15 @@ const CreatePost = () => {
       <form className="flex flex-col w-full gap-2" onSubmit={handleSubmit}>
         <textarea
           className="w-full p-0 text-lg border-gray-800 border-none resize-none textarea focus:outline-none"
-          placeholder="What is happening?!"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
+          placeholder="Exhibition name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <textarea
+          className="w-full p-0 text-lg border-gray-800 border-none resize-none textarea focus:outline-none"
+          placeholder="Exhibition description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
         {image && (
           <div className="relative mx-auto w-72">
@@ -116,4 +126,4 @@ const CreatePost = () => {
     </div>
   );
 };
-export default CreatePost;
+export default CreateExhibition;

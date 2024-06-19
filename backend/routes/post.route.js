@@ -12,11 +12,13 @@ import {
   searchPosts,
   bookmarkUnbookmarkPost,
   getBookmarkedPosts,
+  getPostById,
 } from "../controllers/post.controller.js";
 
 const router = express.Router();
 
 router.get("/all", protectRoute, getAllPosts);
+router.get("/post/:id", protectRoute, getPostById);
 router.get("/search/:query", protectRoute, searchPosts);
 router.get("/following", protectRoute, getFollowingPosts);
 router.get("/likes/:id", protectRoute, getLikedPosts);
