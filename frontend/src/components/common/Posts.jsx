@@ -1,4 +1,4 @@
-import Post from "./Post";
+import PostCard from "./PostCard";
 import PostSkeleton from "../skeletons/PostSkeleton";
 
 import { useQuery } from "@tanstack/react-query";
@@ -68,7 +68,7 @@ const Posts = ({ feedType, username, userId }) => {
       {!isLoadingPosts && !isRefetchingPosts && posts && (
         <div>
           {posts.map((post) => (
-            <Post key={post._id} post={post} />
+            <PostCard key={post._id} post={post} />
           ))}
         </div>
       )}

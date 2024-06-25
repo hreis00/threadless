@@ -16,6 +16,7 @@ import LoadingSpinner from "./components/common/LoadingSpinner";
 import ExhibitionPage from "./pages/exhibition/ExhibitionPage";
 import ExhibitionsPage from "./pages/exhibition/ExhibitionsPage";
 import PostPage from "./pages/post/PostPage";
+import TermsAndConditions from "./pages/terms and conditions/TermsAndConditions";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -45,7 +46,7 @@ function App() {
   }
 
   return (
-    <div className="flex max-w-6xl mx-auto">
+    <div className="flex mx-auto max-w-7xl">
       {authUser && <Sidebar />}
       <Routes>
         <Route
@@ -83,6 +84,10 @@ function App() {
         <Route
           path="/profile/:username"
           element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/terms-and-conditions"
+          element={authUser ? <TermsAndConditions /> : <Navigate to="/login" />}
         />
       </Routes>
       {/* {authUser && <RightPanel />} */}

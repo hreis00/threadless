@@ -9,6 +9,7 @@ const CreatePost = () => {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
   const imgRef = useRef(null);
+  const [isChecked, setIsChecked] = useState(false);
 
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
   const queryClient = useQueryClient();
@@ -107,9 +108,24 @@ const CreatePost = () => {
             ref={imgRef}
             onChange={handleImgChange}
           />
-          <button className="px-4 text-white rounded-full btn btn-primary btn-sm">
-            {isPending ? "Posting..." : "Post"}
-          </button>
+          <div className="flex gap-1">
+            <label htmlFor="isPostPrivate" className="flex items-center px-2 ">
+              <input
+                type="checkbox"
+                className="mr-2"
+                id="isPostPrivate"
+                checked={isChecked}
+                onChange={(e) => setIsChecked(e.target.checked)}
+              />
+              I agree with the terms and conditions.
+            </label>
+            <button
+              className="px-4 text-white rounded-full btn btn-primary btn-sm"
+              disabled={!isChecked}
+            >
+              {isPending ? "Posting..." : "Post"}
+            </button>
+          </div>
         </div>
         {isError && <div className="text-red-500">{error.message}</div>}
       </form>

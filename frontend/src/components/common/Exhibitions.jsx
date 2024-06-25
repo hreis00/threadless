@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import Exhibition from "./Exhibition";
+import ExhibitionCard from "./ExhibitionCard";
 import PostSkeleton from "../skeletons/PostSkeleton";
 import { useEffect } from "react";
 
@@ -44,7 +44,7 @@ const Exhibitions = () => {
       {!isLoadingExhibitions && !isRefetchingExhibitions && exhibitions && (
         <div>
           {exhibitions.map((exhibition) => (
-            <Exhibition key={exhibition._id} exhibition={exhibition} />
+            <ExhibitionCard key={exhibition._id} exhibition={exhibition} />
           ))}
         </div>
       )}

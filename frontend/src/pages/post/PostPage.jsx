@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import Post from "../../components/common/Post";
+import PostCard from "../../components/common/PostCard";
 
 const PostPage = () => {
   const { postId } = useParams();
@@ -19,7 +19,7 @@ const PostPage = () => {
     },
   });
 
-  return <div className="w-full">{post && <Post post={post} />}</div>;
+  return <div className="w-full">{post && <PostCard post={post} />}</div>;
 };
 
 export default PostPage;

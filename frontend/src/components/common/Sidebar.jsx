@@ -10,6 +10,7 @@ import {
   MdAccountCircle,
   MdOutlineLogout,
   MdMuseum,
+  MdOutlineContentCopy,
 } from "react-icons/md";
 
 import toast from "react-hot-toast";
@@ -41,7 +42,7 @@ const Sidebar = () => {
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 
   return (
-    <div className="md:flex-[2_2_0] w-18 max-w-52">
+    <div className="md:flex-[2_2_0] w-18 max-w-60">
       <div className="sticky top-0 left-0 flex flex-col w-20 h-screen border-r border-gray-700 md:w-full">
         <Link to="/" className="mx-auto w-fit">
           <Tsvg className="w-12 h-12 px-2 fill-white hover:bg-stone-900" />
@@ -90,6 +91,17 @@ const Sidebar = () => {
             >
               <MdAccountCircle className="w-8 h-8" />
               <span className="hidden text-lg md:block">Profile</span>
+            </Link>
+          </li>
+          <li className="flex justify-center md:justify-start">
+            <Link
+              to={`/terms-and-conditions`}
+              className="flex items-center gap-3 py-2 pl-2 pr-4 transition-all duration-300 rounded-full cursor-pointer hover:bg-stone-900 max-w-fit"
+            >
+              <MdOutlineContentCopy className="w-8 h-8" />
+              <span className="hidden text-lg md:block">
+                Terms & Conditions
+              </span>
             </Link>
           </li>
         </ul>

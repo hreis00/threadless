@@ -7,7 +7,7 @@ import { MdOutlineSearch } from "react-icons/md";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import FollowButton from "../../components/common/FollowButton";
 
-import Post from "../../components/common/Post";
+import Post from "../../components/common/PostCard";
 
 import useFollow from "../../hooks/useFollow";
 
