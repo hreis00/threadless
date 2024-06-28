@@ -75,18 +75,22 @@ const CreateExhibition = () => {
         </div>
       </div>
       <form className="flex flex-col w-full gap-2" onSubmit={handleSubmit}>
-        <textarea
-          className="w-full p-0 text-lg border-gray-800 border-none resize-none textarea focus:outline-none"
-          placeholder="Exhibition name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <textarea
-          className="w-full p-0 text-lg border-gray-800 border-none resize-none textarea focus:outline-none"
-          placeholder="Exhibition description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        <div className="border-b border-gray-700">
+          <textarea
+            className="w-full p-0 text-lg border-none resize-none textarea focus:outline-none"
+            placeholder="Exhibition name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className="border-b border-gray-700">
+          <textarea
+            className="w-full p-0 text-lg border-none resize-none textarea focus:outline-none"
+            placeholder="Exhibition description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
         {image && (
           <div className="relative mx-auto w-72">
             <IoCloseSharp
@@ -103,7 +107,7 @@ const CreateExhibition = () => {
           </div>
         )}
 
-        <div className="flex justify-between py-2 border-t border-t-gray-700">
+        <div className="flex justify-between py-2">
           <div className="flex items-center gap-1">
             <CiImageOn
               className="w-6 h-6 cursor-pointer fill-primary"
@@ -121,7 +125,7 @@ const CreateExhibition = () => {
             {isPending ? "Posting..." : "Post"}
           </button>
         </div>
-        {isError && <div className="text-red-500">{error.message}</div>}
+        {isError && <div className="text-error">{error.message}</div>}
       </form>
     </div>
   );

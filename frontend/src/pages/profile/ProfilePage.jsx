@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,6 @@ import EditProfileModal from "./EditProfileModal";
 
 import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
-import { FaLink } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { formatMemberSinceDate } from "../../utils/date";
 
@@ -150,14 +149,14 @@ const ProfilePage = () => {
                         "/avatar-placeholder.png"
                       }
                     />
-                    <div className="absolute p-1 rounded-full opacity-0 cursor-pointer top-5 right-3 bg-primary group-hover/avatar:opacity-100">
-                      {isMyProfile && (
+                    {isMyProfile && (
+                      <div className="absolute p-1 rounded-full opacity-0 cursor-pointer top-5 right-3 bg-primary group-hover/avatar:opacity-100">
                         <MdEdit
                           className="w-4 h-4 text-white"
                           onClick={() => profileImageRef.current.click()}
                         />
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -197,29 +196,12 @@ const ProfilePage = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  {/* {user?.link && (
-                    <div className="flex items-center gap-1 ">
-                      <FaLink className="w-3 h-3 text-slate-500" />
-                      <Link
-                        to={user?.link}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-sm text-blue-500 hover:underline"
-                        onClick={(e) => {
-                          e.preventDefault(); // Prevent the default link behavior
-                          window.location.href = user?.link; // Redirect to the link
-                        }}
-                      >
-                        {user?.link}
-                      </Link>
-                    </div>
-                  )} */}
-                  {/* <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
                     <IoCalendarOutline className="w-4 h-4 text-slate-500" />
                     <span className="text-sm text-slate-500">
                       {memberSinceDate}
                     </span>
-                  </div> */}
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <div className="flex items-center gap-1">
@@ -238,7 +220,7 @@ const ProfilePage = () => {
               </div>
               <div className="flex w-full mt-4 border-b border-gray-700">
                 <div
-                  className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-secondary"
+                  className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-base-300"
                   onClick={() => setFeedType("posts")}
                 >
                   Posts
@@ -247,7 +229,7 @@ const ProfilePage = () => {
                   )}
                 </div>
                 <div
-                  className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-secondary"
+                  className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-base-300"
                   onClick={() => setFeedType("likes")}
                 >
                   Likes
@@ -257,7 +239,7 @@ const ProfilePage = () => {
                 </div>
                 {isMyProfile && (
                   <div
-                    className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-secondary"
+                    className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-base-300"
                     onClick={() => setFeedType("bookmarks")}
                   >
                     Bookmarks

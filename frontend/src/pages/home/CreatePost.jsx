@@ -6,7 +6,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 const CreatePost = () => {
-  const [text, setText] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const imgRef = useRef(null);
   const [isChecked, setIsChecked] = useState(false);
@@ -14,12 +15,7 @@ const CreatePost = () => {
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
   const queryClient = useQueryClient();
 
-  const {
-    mutate: createPost,
-    isPending,
-    isError,
-    error,
-  } = useMutation({
+  const { mutate: createPost, isPending } = useMutation({
     mutationFn: async () => {
       try {
         const res = await fetch("/api/posts/create", {
@@ -28,7 +24,8 @@ const CreatePost = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            text,
+            name,
+            description,
             image,
           }),
         });
@@ -41,16 +38,21 @@ const CreatePost = () => {
       }
     },
     onSuccess: () => {
-      setText("");
+      setName("");
+      setDescription("");
       setImage(null);
+      setIsChecked(false);
       toast.success("Post created successfully");
       queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createPost({ text, image });
+    createPost({ name, description, image });
   };
 
   const handleImgChange = (e) => {
@@ -72,12 +74,22 @@ const CreatePost = () => {
         </div>
       </div>
       <form className="flex flex-col w-full gap-2" onSubmit={handleSubmit}>
-        <textarea
-          className="w-full p-0 text-lg border-gray-800 border-none resize-none textarea focus:outline-none"
-          placeholder="What is happening?!"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
+        <div className="border-b border-gray-700">
+          <textarea
+            className="w-full p-0 text-lg border-none resize-none textarea focus:outline-none"
+            placeholder="Name your art"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className="border-b border-gray-700">
+          <textarea
+            className="w-full p-0 text-lg border-none resize-none textarea focus:outline-none"
+            placeholder="Describe your art"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
         {image && (
           <div className="relative mx-auto w-72">
             <IoCloseSharp
@@ -94,7 +106,7 @@ const CreatePost = () => {
           </div>
         )}
 
-        <div className="flex justify-between py-2 border-t border-t-gray-700">
+        <div className="flex justify-between py-2">
           <div className="flex items-center gap-1">
             <CiImageOn
               className="w-6 h-6 cursor-pointer fill-primary"
@@ -127,7 +139,6 @@ const CreatePost = () => {
             </button>
           </div>
         </div>
-        {isError && <div className="text-red-500">{error.message}</div>}
       </form>
     </div>
   );

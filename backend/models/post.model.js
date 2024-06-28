@@ -6,11 +6,16 @@ const postSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    text: {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
       type: String,
     },
     image: {
       type: String,
+      required: true,
     },
     likes: [
       {
@@ -29,6 +34,10 @@ const postSchema = new mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
           required: true,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
         },
       },
     ],

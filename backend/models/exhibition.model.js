@@ -18,6 +18,12 @@ const exhibitionSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    enrolledUsers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );

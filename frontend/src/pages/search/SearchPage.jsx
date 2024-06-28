@@ -64,7 +64,7 @@ const SearchPage = () => {
   return (
     <div className="flex-[4_4_0] mr-auto border-r border-gray-700 min-h-screen">
       <div className="py-2">
-        <label className="flex items-center mx-auto bg-stone-900 input rounded max-w-[50%] input-bordered">
+        <label className="flex items-center mx-auto bg-base-300 input rounded max-w-[50%] input-bordered">
           <MdOutlineSearch size={20} />
           <input
             className="text-center grow"
@@ -77,7 +77,7 @@ const SearchPage = () => {
       </div>
       <div className="flex w-full border-b border-gray-700">
         <div
-          className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-secondary"
+          className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-base-300"
           onClick={() => setFeedType("people")}
         >
           People
@@ -87,7 +87,7 @@ const SearchPage = () => {
         </div>
 
         <div
-          className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-secondary"
+          className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-base-300"
           onClick={() => setFeedType("mostRecent")}
         >
           Most Recent
@@ -111,7 +111,7 @@ const SearchPage = () => {
 
       {/* People */}
       {searchUsers?.length === 0 && feedType === "people" && (
-        <div className="text-center text-gray-500">No search results found</div>
+        <p className="p-4 text-center">No search results found</p>
       )}
 
       {searchUsers &&
@@ -120,7 +120,7 @@ const SearchPage = () => {
           <div key={user._id}>
             <Link
               to={`/profile/${user.username}`}
-              className="flex items-center justify-between px-4 py-2 hover:bg-secondary"
+              className="flex items-center justify-between px-4 py-2 hover:bg-base-300"
             >
               <div className="flex items-center gap-2">
                 <div className="avatar">

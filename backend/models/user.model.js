@@ -51,10 +51,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    link: {
-      type: String,
-      default: "",
-    },
     likedPosts: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -66,6 +62,13 @@ const userSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
+        default: [],
+      },
+    ],
+    enrolledExhibitions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Exhibition",
         default: [],
       },
     ],

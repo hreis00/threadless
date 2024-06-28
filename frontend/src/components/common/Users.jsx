@@ -30,7 +30,7 @@ const Users = () => {
           <Link
             key={user._id}
             to={`/profile/${user.username}`}
-            className="flex items-center justify-between px-4 py-2 hover:bg-secondary"
+            className="flex items-center justify-between px-4 py-2 hover:bg-base-300"
           >
             <div className="flex items-center gap-2">
               <div className="avatar">

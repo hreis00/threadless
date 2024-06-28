@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useUpdateUserProfile from "../../hooks/useUpdateUserProfile";
 
-// TODO: Accept empty strings to bio and link
-const EditProfileModal = ({ authUser }) => {
+// TODO: Accept empty string to bio
+const EditProfileModal = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     username: "",
     email: "",
     bio: "",
-    link: "",
     newPassword: "",
     currentPassword: "",
   });
@@ -18,20 +17,6 @@ const EditProfileModal = ({ authUser }) => {
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  useEffect(() => {
-    if (authUser) {
-      setFormData({
-        fullName: authUser.fullName,
-        username: authUser.username,
-        email: authUser.email,
-        bio: authUser.bio,
-        link: authUser.link,
-        newPassword: "",
-        currentPassword: "",
-      });
-    }
-  }, [authUser]);
 
   return (
     <>
@@ -106,15 +91,8 @@ const EditProfileModal = ({ authUser }) => {
                 onChange={handleInputChange}
               />
             </div>
-            <input
-              type="text"
-              placeholder="Link"
-              className="flex-1 p-2 border border-gray-700 rounded input input-md"
-              value={formData.link}
-              name="link"
-              onChange={handleInputChange}
-            />
-            <button className="text-white rounded-full btn btn-primary btn-sm">
+
+            <button className="rounded-full btn btn-primary btn-sm">
               {isUpdatingProfile ? "Updating..." : "Update"}
             </button>
           </form>

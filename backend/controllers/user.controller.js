@@ -3,6 +3,7 @@ import { v2 as cloudinary } from "cloudinary";
 
 import User from "../models/user.model.js";
 import Notification from "../models/notification.model.js";
+import Exhibition from "../models/exhibition.model.js";
 
 // @desc    Get user profile
 // @route   POST /api/users/profile/:username
@@ -140,7 +141,6 @@ export const updateUserProfile = async (req, res) => {
     currentPassword,
     newPassword,
     bio,
-    link,
   } = req.body;
 
   let { profileImage, coverImage } = req.body;
@@ -151,6 +151,18 @@ export const updateUserProfile = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
+    }
+
+    // Check if username already exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser && existingUser._id != userId) {
+      return res.status(400).json({ error: "Username already exists." });
+    }
+
+    // Check if email already exists
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail && existingEmail._id != userId) {
+      return res.status(400).json({ error: "Email already exists." });
     }
 
     if (
@@ -203,7 +215,6 @@ export const updateUserProfile = async (req, res) => {
     user.profileImage = profileImage || user.profileImage;
     user.coverImage = coverImage || user.coverImage;
     user.bio = bio || user.bio;
-    user.link = link || user.link;
 
     user = await user.save();
 
@@ -212,6 +223,103 @@ export const updateUserProfile = async (req, res) => {
     return res.status(200).json(user);
   } catch (error) {
     console.log("Error updating user profile:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// @desc    Enroll user in an exhibition
+// @route   POST /api/users/enroll/:id
+// @access  Private
+export const enrollExhibition = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { _id: userId } = req.user;
+
+    const exhibition = await Exhibition.findById(id);
+    if (!exhibition) {
+      return res.status(404).json({ error: "Exhibition not found" });
+    }
+
+    if (exhibition.enrolledUsers.includes(userId)) {
+      return res.status(400).json({ error: "User is already enrolled" });
+    }
+
+    // Save the exhibition in the user's enrolledExhibitions field
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    user.enrolledExhibitions.push(exhibition._id);
+    await user.save();
+
+    exhibition.enrolledUsers.push(userId);
+    await exhibition.save();
+
+    res
+      .status(200)
+      .json({ message: "User enrolled successfully in: " + exhibition.name });
+  } catch (error) {
+    console.log("Error enrolling user in exhibition:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// @desc    Unenroll user from an exhibition
+// @route   POST /api/users/unenroll/:id
+// @access  Private
+export const unenrollExhibition = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { _id: userId } = req.user;
+
+    const exhibition = await Exhibition.findById(id);
+    if (!exhibition) {
+      return res.status(404).json({ error: "Exhibition not found" });
+    }
+
+    if (!exhibition.enrolledUsers.includes(userId)) {
+      return res.status(400).json({ error: "User is not enrolled" });
+    }
+
+    // Remove the exhibition from the user's enrolledExhibitions field
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    user.enrolledExhibitions = user.enrolledExhibitions.filter(
+      (enrolledId) => enrolledId.toString() !== exhibition._id.toString()
+    );
+    await user.save();
+
+    exhibition.enrolledUsers = exhibition.enrolledUsers.filter(
+      (enrolledId) => enrolledId.toString() !== userId.toString()
+    );
+    await exhibition.save();
+
+    res.status(200).json({
+      message: "User unenrolled successfully from: " + exhibition.name,
+    });
+  } catch (error) {
+    console.log("Error unenrolling user from exhibition:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// @desc    Get enrolled exhibitions
+// @route   GET /api/users/enrolled-exhibitions
+// @access  Private
+export const getEnrolledExhibitions = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId).populate("enrolledExhibitions");
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(user.enrolledExhibitions);
+  } catch (error) {
+    console.log("Error getting enrolled exhibitions:", error.message);
     res.status(500).json({ error: error.message });
   }
 };

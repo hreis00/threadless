@@ -1,4 +1,4 @@
-export const formatPostDate = (createdAt) => {
+export const formatDate = (createdAt) => {
   const currentDate = new Date();
   const createdAtDate = new Date(createdAt);
 

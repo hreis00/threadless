@@ -119,3 +119,51 @@ export const getUser = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+// @desc    Google login
+// @route   POST /api/auth/google
+// @access  Public
+export const google = async (req, res) => {
+  try {
+    const { email, name, googlePhotoUrl } = req.body;
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      generateTokenAndSetCookie(existingUser._id, res);
+      await existingUser.save();
+      return res.status(200).json({
+        _id: existingUser._id,
+        fullName: existingUser.fullName,
+        username: existingUser.username,
+        email: existingUser.email,
+        followers: existingUser.followers,
+        following: existingUser.following,
+        profileImage: existingUser.profileImage,
+        coverImage: existingUser.coverImage,
+      });
+    }
+    const newUser = new User({
+      username:
+        name.toLowerCase().split(" ").join("") +
+        Math.random().toString(9).slice(-4),
+      email,
+      password: null,
+      profilePicture: googlePhotoUrl,
+      fullName: name,
+    });
+    await newUser.save();
+    generateTokenAndSetCookie(newUser._id, res);
+    return res.status(200).json({
+      _id: newUser._id,
+      fullName: newUser.fullName,
+      username: newUser.username,
+      email: newUser.email,
+      followers: newUser.followers,
+      following: newUser.following,
+      profileImage: newUser.profileImage,
+      coverImage: newUser.coverImage,
+    });
+  } catch (error) {
+    console.log("Error logging in with Google:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

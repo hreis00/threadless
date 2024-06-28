@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-import Tsvg from "../../../components/svgs/T";
-
 import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
@@ -10,7 +8,11 @@ import { MdDriveFileRenameOutline } from "react-icons/md";
 
 import { useMutation } from "@tanstack/react-query";
 
+import { useNavigate } from "react-router-dom";
+
 import toast from "react-hot-toast";
+import ThreadlessLogo from "../../../components/svgs/ThreadlessLogo";
+import OAuth from "../../../components/common/OAuth";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +22,7 @@ const RegisterPage = () => {
     password: "",
   });
 
+  const navigate = useNavigate();
   const { mutate, isError, isPending, error } = useMutation({
     mutationFn: async ({ email, username, fullName, password }) => {
       try {
@@ -47,6 +50,7 @@ const RegisterPage = () => {
     },
     onSuccess: () => {
       toast.success("Account created successfully");
+      navigate("/login");
     },
   });
 
@@ -62,15 +66,14 @@ const RegisterPage = () => {
   return (
     <div className="flex h-screen max-w-screen-xl px-10 mx-auto">
       <div className="items-center justify-center flex-1 hidden lg:flex">
-        <Tsvg className="lg:w-2/3 fill-white" />
+        <ThreadlessLogo className="w-80 fill-primary" />
       </div>
       <div className="flex flex-col items-center justify-center flex-1">
         <form
           className="flex flex-col gap-4 mx-auto lg:w-2/3 md:mx-20"
           onSubmit={handleSubmit}
         >
-          <Tsvg className="w-24 lg:hidden fill-white" />
-          <h1 className="text-4xl font-extrabold text-white">Join today.</h1>
+          <h1 className="text-4xl font-extrabold text-white">Start today.</h1>
           <label className="flex items-center gap-2 rounded input input-bordered">
             <MdOutlineMail />
             <input
@@ -117,9 +120,10 @@ const RegisterPage = () => {
               value={formData.password}
             />
           </label>
-          <button className="text-white rounded-full btn btn-primary">
+          <button className="btn btn-base-300">
             {isPending ? "Loading..." : "Sign up"}
           </button>
+          <OAuth />
           {isError && <p className="text-red-500">{error.message}</p>}
         </form>
         <div className="flex flex-col gap-2 mt-4 lg:w-2/3">
@@ -127,7 +131,7 @@ const RegisterPage = () => {
             Already have an account?
           </p>
           <Link to="/login">
-            <button className="w-full text-white rounded-full btn btn-primary btn-outline">
+            <button className="w-full btn btn-base-300 btn-outline">
               Sign in
             </button>
           </Link>

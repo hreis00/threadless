@@ -71,7 +71,7 @@ export const getPostById = async (req, res) => {
 // @access  Private
 export const createPost = async (req, res) => {
   try {
-    const { text } = req.body;
+    const { name, description } = req.body;
     let { image } = req.body;
     const userId = req.user._id.toString();
 
@@ -80,8 +80,26 @@ export const createPost = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    if (!text && !image) {
-      return res.status(400).json({ error: "Text or image is required" });
+    if (!name && !image) {
+      return res.status(400).json({ error: "Name and image is required" });
+    }
+
+    if (!name) {
+      return res.status(400).json({ error: "Name is required" });
+    }
+
+    if (!image) {
+      return res.status(400).json({ error: "Image is required" });
+    }
+
+    if (!image && req.file) {
+      const uploadedResponse = await cloudinary.uploader.upload(req.file.path);
+      image = uploadedResponse.secure_url;
+    }
+
+    if (name && !image && req.file) {
+      const uploadedResponse = await cloudinary.uploader.upload(req.file.path);
+      image = uploadedResponse.secure_url;
     }
 
     if (image) {
@@ -91,7 +109,8 @@ export const createPost = async (req, res) => {
 
     const newPost = new Post({
       user: userId,
-      text,
+      name,
+      description,
       image,
     });
 

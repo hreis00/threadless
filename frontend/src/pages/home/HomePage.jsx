@@ -12,7 +12,7 @@ const HomePage = () => {
         {/* HEADER */}
         <div className="flex w-full border-b border-gray-700">
           <div
-            className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-secondary"
+            className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-base-300"
             onClick={() => setFeedType("forYou")}
           >
             For you
@@ -21,7 +21,7 @@ const HomePage = () => {
             )}
           </div>
           <div
-            className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-secondary"
+            className="relative flex justify-center flex-1 p-3 transition duration-300 cursor-pointer hover:bg-base-300"
             onClick={() => setFeedType("following")}
           >
             Following

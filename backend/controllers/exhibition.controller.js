@@ -127,3 +127,27 @@ export const getExhibitionBySlug = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+// @desc    Get the list of users enrolled in an exhibition
+// @route   GET /api/exhibitions/:id/enrolled-users
+// @access  Private
+export const getEnrolledUsers = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const exhibition = await Exhibition.findById(id);
+
+    if (!exhibition) {
+      return res.status(404).json({ error: "Exhibition not found" });
+    }
+
+    const enrolledUsers = await User.find({
+      enrolledExhibitions: exhibition._id,
+    });
+
+    res.status(200).json(enrolledUsers);
+  } catch (error) {
+    console.log("Error getting enrolled users:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

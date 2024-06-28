@@ -6,11 +6,8 @@ Threadless is social media/art gallery that allows users to publish their artwor
 
 ### TODO:
 
-- [ ] Implement an administrator feature.
 - [ ] Implement a payment/checkout feature.
-- [ ] Implement a bookmark feature.
-- [ ] Implement an events page, allowing users to view artists artworks.
+- [ ] Refine the exhibitions page, using the same method for the PostPage and PostCard (maybe add diferent textbox and allow to upload more than one image).
 - [ ] Refine the search page, allowing users to search for other users/artists alongside artwork and future events.
 
-- [ ] Create exhibition/post page.
-- [ ] Check the exhibition/post slug.
+- [ ] Implement comment model, controller and route, to allow users to comment, delete the comments and recieve notifications.

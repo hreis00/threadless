@@ -1,8 +1,8 @@
-import PostCard from "./PostCard";
-import PostSkeleton from "../skeletons/PostSkeleton";
-
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+
+import PostCard from "./PostCard";
+import PostSkeleton from "../skeletons/PostSkeleton";
 
 const Posts = ({ feedType, username, userId }) => {
   const getPostEndpoint = () => {
@@ -15,12 +15,12 @@ const Posts = ({ feedType, username, userId }) => {
         return `/api/posts/user/${username}`;
       case "likes":
         return `/api/posts/likes/${userId}`;
+      case "bookmarks":
+        return `/api/posts/bookmarks/${userId}`;
       case "people":
         return `/api/users`;
       case "mostRecent":
         return `/api/posts/all`;
-      case "bookmarks":
-        return `/api/posts/bookmarks/${userId}`;
       default:
         return "/api/posts/all";
     }
@@ -63,7 +63,7 @@ const Posts = ({ feedType, username, userId }) => {
         </div>
       )}
       {!isLoadingPosts && !isRefetchingPosts && posts?.length === 0 && (
-        <p className="my-4 text-center">No posts in this tab. Switch 👻</p>
+        <p className="my-4 text-center">Nothing to be displayed yet!</p>
       )}
       {!isLoadingPosts && !isRefetchingPosts && posts && (
         <div>
