@@ -34,7 +34,7 @@ const Theme = () => {
 
   return (
     <div className="flex flex-col items-center transition-all duration-300 rounded-full md:flex-row max-w-fit">
-      <div className="py-2 md:pl-2 md:pr-4">
+      <div className="py-2 md:pl-2 md:pr-3">
         <MdContrast className="w-8 h-8" />
       </div>
       <select
