@@ -140,28 +140,32 @@ export const google = async (req, res) => {
         profileImage: existingUser.profileImage,
         coverImage: existingUser.coverImage,
       });
+    } else {
+      const generatePassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(generatePassword, salt);
+      const newUser = new User({
+        username:
+          name.toLowerCase().split(" ").join("") +
+          Math.random().toString(9).slice(-4),
+        email,
+        profilePicture: googlePhotoUrl,
+        fullName: name,
+        password: hashedPassword,
+      });
+      await newUser.save();
+      generateTokenAndSetCookie(newUser._id, res);
+      return res.status(200).json({
+        _id: newUser._id,
+        fullName: newUser.fullName,
+        username: newUser.username,
+        email: newUser.email,
+        followers: newUser.followers,
+        following: newUser.following,
+      });
     }
-    const newUser = new User({
-      username:
-        name.toLowerCase().split(" ").join("") +
-        Math.random().toString(9).slice(-4),
-      email,
-      password: null,
-      profilePicture: googlePhotoUrl,
-      fullName: name,
-    });
-    await newUser.save();
-    generateTokenAndSetCookie(newUser._id, res);
-    return res.status(200).json({
-      _id: newUser._id,
-      fullName: newUser.fullName,
-      username: newUser.username,
-      email: newUser.email,
-      followers: newUser.followers,
-      following: newUser.following,
-      profileImage: newUser.profileImage,
-      coverImage: newUser.coverImage,
-    });
   } catch (error) {
     console.log("Error logging in with Google:", error.message);
     res.status(500).json({ error: "Internal Server Error" });

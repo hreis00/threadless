@@ -358,59 +358,55 @@ const PostPage = () => {
             )}
             {post?.comments.length > 0 && (
               <>
-                {post.comments
-                  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                  .map((comment) => (
-                    <div
-                      key={comment._id}
-                      className="flex items-start w-full gap-2 p-2 border border-gray-700 rounded bg-base-300"
-                    >
-                      <div className="avatar">
-                        <div className="w-8 rounded-full">
-                          <img
-                            src={
-                              comment.user.profileImage ||
-                              "/avatar-placeholder.png"
-                            }
-                          />
-                        </div>
-                      </div>
-                      <div className="flex flex-col w-full">
-                        <div className="flex items-center gap-1">
-                          <Link
-                            to={`/profile/${comment.user.username}`}
-                            className="font-bold"
-                          >
-                            {comment.user.fullName}
-                          </Link>
-                          <span className="flex gap-1 text-xs font-thin">
-                            <Link to={`/profile/${comment.user.username}`}>
-                              @{comment.user.username}
-                            </Link>
-                            <span>·</span>
-                            <span>{formatDate(comment.createdAt)}</span>
-                          </span>
-                          {authUser && authUser._id === comment.user._id && (
-                            <span className="flex justify-end flex-1">
-                              {!isDeletingComment && (
-                                <FaTrash
-                                  className="cursor-pointer hover:text-red-500"
-                                  onClick={() =>
-                                    handleDeleteComment(comment._id)
-                                  }
-                                />
-                              )}
-
-                              {isDeletingComment && (
-                                <LoadingSpinner size="sm" />
-                              )}
-                            </span>
-                          )}
-                        </div>
-                        <div className="py-1 text-sm">{comment.text}</div>
+                {post.comments.map((comment) => (
+                  <div
+                    key={comment._id}
+                    className="flex items-start w-full gap-2 p-2 border border-gray-700 rounded bg-base-300"
+                  >
+                    <div className="avatar">
+                      <div className="w-8 rounded-full">
+                        <img
+                          src={
+                            comment?.user?.profileImage ||
+                            "/avatar-placeholder.png"
+                          }
+                        />
                       </div>
                     </div>
-                  ))}
+                    <div className="flex flex-col w-full">
+                      <div className="flex items-center gap-1">
+                        <Link
+                          to={`/profile/${comment?.user?.username}`}
+                          className="font-bold"
+                        >
+                          {comment?.user?.fullName}
+                        </Link>
+                        <span className="flex gap-1 text-xs font-thin">
+                          <Link to={`/profile/${comment?.user?.username}`}>
+                            @{comment?.user?.username}
+                          </Link>
+                          <span>·</span>
+                          <span>{formatDate(comment?.createdAt)}</span>
+                        </span>
+                        {authUser && authUser._id === comment?.user?._id && (
+                          <span className="flex justify-end flex-1">
+                            {!isDeletingComment && (
+                              <FaTrash
+                                className="cursor-pointer hover:text-red-500"
+                                onClick={() =>
+                                  handleDeleteComment(comment?._id)
+                                }
+                              />
+                            )}
+
+                            {isDeletingComment && <LoadingSpinner size="sm" />}
+                          </span>
+                        )}
+                      </div>
+                      <div className="py-1 text-sm">{comment?.text}</div>
+                    </div>
+                  </div>
+                ))}
               </>
             )}
           </div>

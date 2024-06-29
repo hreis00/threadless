@@ -21,7 +21,7 @@ const Post = ({ post }) => {
 
   const postOwner = post.user;
   const isLiked = post.likes.includes(authUser._id);
-  const isMyPost = authUser._id === post.user._id;
+  const isMyPost = authUser._id === post?.user?._id;
   const formattedPostDate = formatDate(post.createdAt);
   const isBookmarked = post.bookmarks.includes(authUser._id);
 
@@ -132,19 +132,19 @@ const Post = ({ post }) => {
     <div className="flex items-start gap-2 p-4 border-b border-gray-700 hover:bg-base-300">
       <div className="avatar">
         <div className="w-8 rounded-full">
-          <Link to={`/profile/${postOwner.username}`}>
-            <img src={postOwner.profileImage || "/avatar-placeholder.png"} />
+          <Link to={`/profile/${postOwner?.username}`}>
+            <img src={postOwner?.profileImage || "/avatar-placeholder.png"} />
           </Link>
         </div>
       </div>
       <div className="flex flex-col flex-1">
         <div className="flex items-center gap-2">
-          <Link to={`/profile/${postOwner.username}`} className="font-bold">
-            {postOwner.fullName}
+          <Link to={`/profile/${postOwner?.username}`} className="font-bold">
+            {postOwner?.fullName}
           </Link>
           <span className="flex gap-1 text-xs font-thin">
-            <Link to={`/profile/${postOwner.username}`}>
-              @{postOwner.username}
+            <Link to={`/profile/${postOwner?.username}`}>
+              @{postOwner?.username}
             </Link>
             <span>·</span>
             <span>{formattedPostDate}</span>
