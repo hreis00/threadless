@@ -375,7 +375,7 @@ const PostPage = () => {
                           />
                         </div>
                       </div>
-                      <div className="flex flex-col">
+                      <div className="flex flex-col w-full">
                         <div className="flex items-center gap-1">
                           <Link
                             to={`/profile/${comment.user.username}`}
