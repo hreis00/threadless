@@ -9,14 +9,21 @@ export const getNotifications = async (req, res) => {
 
     const notifications = await Notification.find({
       to: userId,
-    }).populate({
-      path: "from",
-      select: "username profileImage",
-    });
+    })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "from",
+        select: "username profileImage",
+      });
+
+    const filteredNotifications = notifications.filter(
+      (notification) =>
+        notification.from._id.toString() !== req.user._id.toString()
+    );
 
     await Notification.updateMany({ to: userId }, { read: true });
 
-    res.status(200).json(notifications);
+    res.status(200).json(filteredNotifications);
   } catch (error) {
     console.log("Error getting notifications:", error);
     res.status(500).json({ error: "Internal server error" });

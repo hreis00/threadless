@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { MdPassword, MdPerson } from "react-icons/md";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import toast from "react-hot-toast";
+
 import ThreadlessLogo from "../../../components/svgs/ThreadlessLogo";
 import OAuth from "../../../components/common/OAuth";
 
@@ -61,57 +60,79 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex h-screen max-w-screen-xl px-10 mx-auto">
-      <div className="items-center justify-center flex-1 hidden lg:flex">
-        <ThreadlessLogo className="w-80 fill-primary" />
-      </div>
-      <div className="flex flex-col items-center justify-center flex-1">
-        <form
-          className="flex flex-col gap-4 mx-auto lg:w-2/3 md:mx-20"
-          onSubmit={handleSubmit}
-        >
-          <h1 className="text-4xl font-extrabold text-white">
-            {"Let's"} start.
-          </h1>
-          <label className="flex items-center gap-2 rounded input input-bordered">
-            <MdPerson />
-            <input
-              type="text"
-              className="grow"
-              placeholder="Username"
-              name="username"
-              onChange={handleInputChange}
-              value={formData.username}
-            />
-          </label>
-
-          <label className="flex items-center gap-2 rounded input input-bordered">
-            <MdPassword />
-            <input
-              type="password"
-              className="grow"
-              placeholder="Password"
-              name="password"
-              onChange={handleInputChange}
-              value={formData.password}
-            />
-          </label>
-          <button className="btn btn-base-300">
-            {isPending ? "Loading..." : "Login"}
-          </button>
-          <OAuth />
-          {isError && <p className="text-error">{error.message}</p>}
-        </form>
-        <div className="flex flex-col gap-2 mt-4">
-          <p className="text-lg text-white">{"Don't"} have an account?</p>
-          <Link to="/register">
-            <button className="w-full btn btn-base-300 btn-outline">
-              Sign up
+    <div className="flex min-h-[100dvh] items-center mx-auto justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
+        <div>
+          <ThreadlessLogo className="w-[50%] mx-auto fill-primary" />
+          <h2 className="mt-6 text-3xl font-bold tracking-tight text-center text-foreground">
+            Sign in to your Threadless account
+          </h2>
+          <p className="mt-2 text-sm text-center text-muted-foreground">
+            Or{" "}
+            <Link
+              className="font-medium text-primary hover:text-primary/90"
+              to="/register"
+            >
+              create a new account
+            </Link>
+          </p>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-2 rounded-md shadow-sm">
+            <div>
+              <label
+                className="text-sm font-medium leading-none sr-only peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor="username"
+              >
+                Username
+              </label>
+              <input
+                className="relative block w-full h-10 px-3 py-2 text-sm border border-b border-gray-300 rounded-md appearance-none bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-t-md text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+                id="username"
+                autoComplete="username"
+                required=""
+                type="text"
+                name="username"
+                placeholder="Username"
+                onChange={handleInputChange}
+                value={formData.username}
+              />
+            </div>
+            <div>
+              <label
+                className="text-sm font-medium leading-none sr-only peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor="password"
+              >
+                Password
+              </label>
+              <input
+                className="relative block w-full h-10 px-3 py-2 text-sm border border-b border-gray-300 rounded-md appearance-none bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-b-md text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+                id="password"
+                autoComplete="current-password"
+                required=""
+                type="password"
+                name="password"
+                placeholder="Password"
+                onChange={handleInputChange}
+                value={formData.password}
+              />
+            </div>
+          </div>
+          <div>
+            <button className="relative flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-medium transition-colors border border-transparent rounded-md whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group btn text-base-300 btn-outline bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+              {isPending ? "Loading..." : "Login"}
             </button>
-          </Link>
+          </div>
+        </form>
+        <div>
+          <OAuth />
+          {isError && (
+            <p className="p-2 text-center text-error">{error.message}</p>
+          )}
         </div>
       </div>
     </div>
   );
 };
+
 export default LoginPage;

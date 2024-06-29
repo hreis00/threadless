@@ -47,7 +47,7 @@ const OAuth = () => {
       type="button"
       onClick={handleGoogleClick}
       disabled={isPending}
-      className="gap-2 btn btn-base-300 btn-outline"
+      className="w-full gap-2 btn btn-base-300 btn-outline"
     >
       <AiFillGoogleCircle className="w-6 h-6" />
       {isPending ? "Loading..." : "Continue with Google"}

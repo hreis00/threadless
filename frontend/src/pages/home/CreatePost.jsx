@@ -85,7 +85,7 @@ const CreatePost = () => {
         <div className="border-b border-gray-700">
           <textarea
             className="w-full p-0 text-lg border-none resize-none textarea focus:outline-none"
-            placeholder="Describe your art"
+            placeholder="Describe your art (optional)"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />

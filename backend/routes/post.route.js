@@ -4,7 +4,6 @@ import {
   getAllPosts,
   createPost,
   likeUnlikePost,
-  commentPost,
   deletePost,
   getLikedPosts,
   getFollowingPosts,
@@ -27,7 +26,6 @@ router.get("/user/:username", protectRoute, getUserPosts);
 router.post("/create", protectRoute, createPost);
 router.post("/like/:id", protectRoute, likeUnlikePost);
 router.post("/bookmark/:id", protectRoute, bookmarkUnbookmarkPost);
-router.post("/comment/:id", protectRoute, commentPost);
 router.delete("/:id", protectRoute, deletePost);
 
 export default router;

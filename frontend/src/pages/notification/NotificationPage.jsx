@@ -5,7 +5,7 @@ import LoadingSpinner from "../../components/common/LoadingSpinner";
 import toast from "react-hot-toast";
 
 import { IoSettingsOutline } from "react-icons/io5";
-import { FaUser, FaBookmark } from "react-icons/fa";
+import { FaUser, FaBookmark, FaComment } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
 
 const NotificationPage = () => {
@@ -49,10 +49,10 @@ const NotificationPage = () => {
 
   return (
     <>
-      <div className="flex-[4_4_0] border-l border-r border-gray-700 min-h-screen">
+      <div className="flex-[1_1_0] mr-auto border-r border-gray-700 min-h-screen">
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
           <p className="font-bold">Notifications</p>
-          <div className="dropdown ">
+          <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="m-1">
               <IoSettingsOutline className="w-4" />
             </div>
@@ -84,46 +84,42 @@ const NotificationPage = () => {
                 <FaHeart className="w-5 h-5 text-red-500" />
               )}
               {notification.type === "comment" && (
-                <FaHeart className="w-5 h-5 text-red-500" />
+                <FaComment className="w-5 h-5 text-sky-400" />
               )}
               {notification.type === "bookmark" && (
                 <FaBookmark className="w-5 h-5 text-yellow-600" />
               )}
-              <Link to={`/profile/${notification.from.username}`}>
-                <div className="avatar">
-                  <div className="w-8 rounded-full">
+              <div className="avatar">
+                <div className="w-8 rounded-full">
+                  <Link to={`/profile/${notification.from.username}`}>
                     <img
                       src={
                         notification.from.profileImage ||
                         "/avatar-placeholder.png"
                       }
                     />
-                  </div>
+                  </Link>
                 </div>
-                <div className="flex gap-1">
+              </div>
+              <div className="flex gap-1">
+                <Link to={`/profile/${notification.from.username}`}>
                   <span className="font-bold">
                     @{notification.from.username}
                   </span>
-                  {["follow", "like", "comment", "bookmark"].includes(
-                    notification.type
-                  ) && (
-                    <div>
-                      {notification.type === "follow" && (
-                        <span>followed you!</span>
-                      )}
-                      {notification.type === "like" && (
-                        <span>liked your post!</span>
-                      )}
-                      {notification.type === "comment" && (
-                        <span>commented on your post!</span>
-                      )}
-                      {notification.type === "bookmark" && (
-                        <span>bookmarked your post!</span>
-                      )}
-                    </div>
+                </Link>
+                <>
+                  {notification.type === "follow" && <span>followed you!</span>}
+                  {notification.type === "like" && (
+                    <span>liked your post!</span>
                   )}
-                </div>
-              </Link>
+                  {notification.type === "comment" && (
+                    <span>commented on your post!</span>
+                  )}
+                  {notification.type === "bookmark" && (
+                    <span>bookmarked your post!</span>
+                  )}
+                </>
+              </div>
             </div>
           </div>
         ))}

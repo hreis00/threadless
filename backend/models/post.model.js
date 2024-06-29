@@ -26,19 +26,9 @@ const postSchema = new mongoose.Schema(
     ],
     comments: [
       {
-        text: {
-          type: String,
-          required: true,
-        },
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
-          required: true,
-        },
-        createdAt: {
-          type: Date,
-          default: Date.now,
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+        default: "",
       },
     ],
     bookmarks: [

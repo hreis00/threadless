@@ -15,8 +15,6 @@ import LoadingSpinner from "./LoadingSpinner";
 import { formatDate } from "../../utils/date";
 
 const Post = ({ post }) => {
-  // const [comment, setComment] = useState("");
-
   const navigate = useNavigate();
 
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
@@ -151,6 +149,7 @@ const Post = ({ post }) => {
             <span>·</span>
             <span>{formattedPostDate}</span>
           </span>
+          {/* Delete */}
           {isMyPost && (
             <span className="flex justify-end flex-1">
               {!isDeleting && (
@@ -188,8 +187,8 @@ const Post = ({ post }) => {
               className="flex items-center gap-1 cursor-pointer group"
               onClick={() => navigate(`/post/${post._id}`)}
             >
-              <FaComment className="w-4 h-4 text-slate-500 group-hover:text-sky-400" />
-              <span className="text-sm text-slate-500 group-hover:text-sky-400">
+              <FaComment className="w-4 h-4 group-hover:text-sky-400" />
+              <span className="text-sm group-hover:text-sky-400">
                 {post.comments.length}
               </span>
             </div>
@@ -200,7 +199,7 @@ const Post = ({ post }) => {
             >
               {isLiking && <LoadingSpinner size="sm" />}
               {!isLiked && !isLiking && (
-                <FaHeart className="w-4 h-4 cursor-pointer text-slate-500 group-hover:text-red-500" />
+                <FaHeart className="w-4 h-4 cursor-pointer group-hover:text-red-500" />
               )}
               {isLiked && !isLiking && (
                 <FaHeart className="w-4 h-4 text-red-500 cursor-pointer " />
@@ -208,7 +207,7 @@ const Post = ({ post }) => {
 
               <span
                 className={`text-sm group-hover:text-red-500 ${
-                  isLiked ? "text-red-500" : "text-slate-500"
+                  isLiked ? "text-red-500" : ""
                 }`}
               >
                 {post.likes.length}
@@ -221,7 +220,7 @@ const Post = ({ post }) => {
             >
               {isBookmarking && <LoadingSpinner size="sm" />}
               {!isBookmarked && !isBookmarking && (
-                <FaBookmark className="w-4 h-4 cursor-pointer text-slate-500 group-hover:text-yellow-600" />
+                <FaBookmark className="w-4 h-4 cursor-pointer group-hover:text-yellow-600" />
               )}
               {isBookmarked && !isBookmarking && (
                 <FaBookmark className="w-4 h-4 text-yellow-600 cursor-pointer" />
@@ -229,7 +228,7 @@ const Post = ({ post }) => {
               {isMyPost && (
                 <span
                   className={`text-sm group-hover:text-yellow-600 ${
-                    isBookmarked ? "text-yellow-600" : "text-slate-500"
+                    isBookmarked ? "text-yellow-600" : ""
                   }`}
                 >
                   {post.bookmarks.length}

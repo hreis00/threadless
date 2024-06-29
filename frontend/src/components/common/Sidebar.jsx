@@ -128,7 +128,7 @@ const Sidebar = () => {
                 <p className="w-20 text-sm font-bold truncate">
                   {authUser?.fullName}
                 </p>
-                <p className="text-sm">@{authUser?.username}</p>
+                <p className="text-xs">@{authUser?.username}</p>
               </div>
               <MdOutlineLogout
                 className="self-center w-5 h-5 cursor-pointer"
@@ -143,8 +143,10 @@ const Sidebar = () => {
         )}
         <div className="p-4 text-xs">
           <p>Copyright © 2024</p>
-          <p>Hugo Bettencourt dos Santos de Sá Reis - Nº. 35130</p>
-          <p>PA - 2023/24</p>
+          <p className="hidden md:inline-block">
+            Hugo Bettencourt dos Santos de Sá Reis - Nº. 35130
+          </p>
+          <p className="hidden md:inline-block">PA - 2023/24</p>
         </div>
       </div>
     </div>

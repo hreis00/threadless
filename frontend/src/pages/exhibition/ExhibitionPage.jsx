@@ -36,13 +36,32 @@ const ExhibitionPage = () => {
                 </span>
               </div>
               <span className="text-sm">{exhibition?.description}</span>
-              {exhibition?.image && (
-                <img
-                  src={exhibition?.image}
-                  className="self-center object-contain border border-gray-700 rounded-lg h-80"
-                  alt=""
-                />
-              )}
+              <div className="w-fit">
+                <button
+                  onClick={() =>
+                    document.getElementById("image-selected").showModal()
+                  }
+                >
+                  <img
+                    src={exhibition.image}
+                    className="object-contain border border-gray-700 rounded-lg cursor-pointer h-80"
+                    alt=""
+                  />
+                </button>
+                <dialog id="image-selected" className="p-4 modal">
+                  <div className="w-fit p-0 modal-box max-w-[1200px]">
+                    <form method="dialog">
+                      <button className="absolute top-1 right-1 btn btn-sm btn-circle hover:btn-error">
+                        ✕
+                      </button>
+                    </form>
+                    <img src={exhibition.image} alt="" className="rounded " />
+                  </div>
+                  <form method="dialog" className="modal-backdrop">
+                    <button className="outline-none">Close</button>
+                  </form>
+                </dialog>
+              </div>
             </div>
           </div>
         </div>

@@ -42,7 +42,7 @@ const PostPage = () => {
     },
   });
 
-  const { mutate: deletePost, isPending: isDeleting } = useMutation({
+  const { mutate: deletePost, isPending: isDeletingPost } = useMutation({
     mutationFn: async () => {
       try {
         const res = await fetch(`/api/posts/${post._id}`, {
@@ -90,7 +90,7 @@ const PostPage = () => {
   const { mutate: commentPost, isPending: isCommenting } = useMutation({
     mutationFn: async () => {
       try {
-        const res = await fetch(`/api/posts/comment/${post._id}`, {
+        const res = await fetch(`/api/comments/${post._id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -141,19 +141,48 @@ const PostPage = () => {
     },
   });
 
-  const formattedPostDate = formatDate(post?.createdAt);
+  const { mutate: deleteComment, isPending: isDeletingComment } = useMutation({
+    mutationFn: async (commentId) => {
+      try {
+        const res = await fetch(`/api/comments/${post._id}/${commentId}`, {
+          method: "DELETE",
+        });
 
-  const isMyPost = authUser._id === post?.user._id;
-  const isLiked = post?.likes.includes(authUser._id);
-  const isBookmarked = post?.bookmarks.includes(authUser._id);
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || "Something went wrong");
+
+        return data;
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    onSuccess: () => {
+      toast.success("Comment deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["post"] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const formattedPostDate = formatDate(post?.createdAt);
+  const isMyPost = authUser._id === post?.user?._id;
+  const isLiked = post?.likes?.includes(authUser._id);
+  const isBookmarked = post?.bookmarks?.includes(authUser._id);
 
   const handleBookmarkPost = () => {
     if (isBookmarking) return;
     bookmarkPost();
   };
+
   const handleDeletePost = () => {
     deletePost();
     navigate("/");
+  };
+
+  const handleDeleteComment = (commentId) => {
+    deleteComment(commentId);
   };
 
   const handlePostComment = (e) => {
@@ -180,9 +209,9 @@ const PostPage = () => {
           <div className="flex items-start gap-2 p-4 border-b border-gray-700">
             <div className="avatar">
               <div className="w-8 rounded-full">
-                <Link to={`/profile/${post.user.username}`} className="">
+                <Link to={`/profile/${post?.user?.username}`} className="">
                   <img
-                    src={post.user.profileImage || "/avatar-placeholder.png"}
+                    src={post?.user?.profileImage || "/avatar-placeholder.png"}
                   />
                 </Link>
               </div>
@@ -190,28 +219,28 @@ const PostPage = () => {
             <div className="flex flex-col flex-1">
               <div className="flex items-center gap-2">
                 <Link
-                  to={`/profile/${post.user.username}`}
+                  to={`/profile/${post?.user?.username}`}
                   className="font-bold"
                 >
-                  {post.user.fullName}
+                  {post?.user?.fullName}
                 </Link>
                 <span className="flex gap-1 text-xs font-thin">
-                  <Link to={`/profile/${post.user.username}`}>
-                    @{post.user.username}
+                  <Link to={`/profile/${post?.user?.username}`}>
+                    @{post?.user?.username}
                   </Link>
                   <span>·</span>
                   <span>{formattedPostDate}</span>
                 </span>
                 {isMyPost && (
                   <span className="flex justify-end flex-1">
-                    {!isDeleting && (
+                    {!isDeletingPost && (
                       <FaTrash
                         className="cursor-pointer hover:text-red-500"
                         onClick={handleDeletePost}
                       />
                     )}
 
-                    {isDeleting && <LoadingSpinner size="sm" />}
+                    {isDeletingPost && <LoadingSpinner size="sm" />}
                   </span>
                 )}
               </div>
@@ -249,9 +278,9 @@ const PostPage = () => {
                 <div className="flex items-center justify-around w-full gap-4">
                   {/* Comment */}
                   <div className="flex items-center gap-1 group">
-                    <FaComment className="w-4 h-4 text-slate-500 group-hover:text-sky-400" />
-                    <span className="text-sm text-slate-500 group-hover:text-sky-400">
-                      {post.comments.length}
+                    <FaComment className="w-4 h-4 group-hover:text-sky-400" />
+                    <span className="text-sm group-hover:text-sky-400">
+                      {post?.comments?.length}
                     </span>
                   </div>
                   {/* Like */}
@@ -261,17 +290,17 @@ const PostPage = () => {
                   >
                     {isLiking && <LoadingSpinner size="sm" />}
                     {!isLiked && !isLiking && (
-                      <FaHeart className="w-4 h-4 cursor-pointer text-slate-500 group-hover:text-pink-500" />
+                      <FaHeart className="w-4 h-4 cursor-pointer group-hover:text-pink-500" />
                     )}
                     {isLiked && !isLiking && (
                       <FaHeart className="w-4 h-4 text-pink-500 cursor-pointer " />
                     )}
                     <span
                       className={`text-sm group-hover:text-pink-500 ${
-                        isLiked ? "text-pink-500" : "text-slate-500"
+                        isLiked ? "text-pink-500" : ""
                       }`}
                     >
-                      {post.likes.length}
+                      {post?.likes?.length}
                     </span>
                   </div>
                   {/* Bookmark */}
@@ -281,7 +310,7 @@ const PostPage = () => {
                   >
                     {isBookmarking && <LoadingSpinner size="sm" />}
                     {!isBookmarked && !isBookmarking && (
-                      <FaBookmark className="w-4 h-4 cursor-pointer text-slate-500 group-hover:text-yellow-600" />
+                      <FaBookmark className="w-4 h-4 cursor-pointer group-hover:text-yellow-600" />
                     )}
                     {isBookmarked && !isBookmarking && (
                       <FaBookmark className="w-4 h-4 text-yellow-600 cursor-pointer" />
@@ -289,7 +318,7 @@ const PostPage = () => {
                     {isMyPost && (
                       <span
                         className={`text-sm group-hover:text-yellow-600 ${
-                          isBookmarked ? "text-yellow-600" : "text-slate-500"
+                          isBookmarked ? "text-yellow-600" : ""
                         }`}
                       >
                         {post.bookmarks.length}
@@ -322,7 +351,7 @@ const PostPage = () => {
                 {isCommenting ? <LoadingSpinner size="md" /> : "Post"}
               </button>
             </form>
-            {post?.comments.length === 0 && (
+            {post?.comments?.length === 0 && (
               <p className="w-full text-center text-gray-500">
                 Be the first one to comment!
               </p>
@@ -361,6 +390,22 @@ const PostPage = () => {
                             <span>·</span>
                             <span>{formatDate(comment.createdAt)}</span>
                           </span>
+                          {authUser && authUser._id === comment.user._id && (
+                            <span className="flex justify-end flex-1">
+                              {!isDeletingComment && (
+                                <FaTrash
+                                  className="cursor-pointer hover:text-red-500"
+                                  onClick={() =>
+                                    handleDeleteComment(comment._id)
+                                  }
+                                />
+                              )}
+
+                              {isDeletingComment && (
+                                <LoadingSpinner size="sm" />
+                              )}
+                            </span>
+                          )}
                         </div>
                         <div className="py-1 text-sm">{comment.text}</div>
                       </div>

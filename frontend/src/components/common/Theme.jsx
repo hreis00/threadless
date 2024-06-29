@@ -5,7 +5,7 @@ import { MdContrast } from "react-icons/md";
 
 const Theme = () => {
   const [selectedTheme, setSelectedTheme] = useState("");
-  const isAuthenticated = false; // Set this to the user's authentication status
+  const isAuthenticated = false;
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("selectedTheme");

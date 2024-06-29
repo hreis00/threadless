@@ -1,7 +1,9 @@
 import User from "../models/user.model.js";
 import Post from "../models/post.model.js";
-import { v2 as cloudinary } from "cloudinary";
 import Notification from "../models/notification.model.js";
+import Comment from "../models/comment.model.js";
+
+import { v2 as cloudinary } from "cloudinary";
 
 // @desc    Search posts
 // @route   GET /api/posts/search/:query
@@ -30,18 +32,19 @@ export const searchPosts = async (req, res) => {
 // @access  Private
 export const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.find()
-      .sort({ createdAt: -1 })
-      .populate({ path: "user", select: "-password" })
-      .populate({ path: "comments.user", select: "-password" });
+    const posts = await Post.find().sort({ createdAt: -1 }).populate({
+      path: "user",
+      select: "_id username fullName profileImage",
+    });
 
     if (posts.length === 0) {
       return res.status(200).json([]);
     }
+
     res.status(200).json(posts);
   } catch (error) {
-    console.log("Error getting posts:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.log("Error getting posts:", error.message);
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -52,12 +55,30 @@ export const getPostById = async (req, res) => {
   const postId = req.params.id;
   try {
     const post = await Post.findById(postId)
-      .populate({ path: "user", select: "-password" })
-      .populate({ path: "comments.user", select: "-password" });
+      .populate({
+        path: "user",
+        select: "_id username fullName profileImage",
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user",
+          select: "_id username fullName profileImage",
+        },
+      });
 
     if (!post) {
       return res.status(404).json({ error: "Post not found" });
     }
+
+    const comments = await Comment.find({ post: postId })
+      .populate({
+        path: "user",
+        select: "_id username fullName profileImage",
+      })
+      .sort({ createdAt: -1 });
+
+    post.comments = comments;
 
     res.status(200).json(post);
   } catch (error) {
@@ -152,40 +173,6 @@ export const deletePost = async (req, res) => {
   }
 };
 
-// TODO: Create notification
-// @desc    Comment a post
-// @route   POST /api/posts/comment/:id
-// @access  Private
-export const commentPost = async (req, res) => {
-  try {
-    const { text } = req.body;
-    const postId = req.params.id;
-    const userId = req.user._id;
-
-    if (!text) {
-      return res.status(400).json({ error: "Text is required" });
-    }
-
-    const post = await Post.findById(postId);
-    if (!post) {
-      return res.status(404).json({ error: "Post not found" });
-    }
-
-    const comment = {
-      user: userId,
-      text,
-    };
-
-    post.comments.push(comment);
-    await post.save();
-
-    res.status(200).json(post);
-  } catch (error) {
-    console.log("Error commenting post:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
 // @desc    Like/Unlike a post
 // @route   POST /api/posts/like/:id
 // @access  Private
@@ -204,7 +191,14 @@ export const likeUnlikePost = async (req, res) => {
 
     if (userLikedPost) {
       // Unlike post
-      await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
+      await Post.updateOne(
+        { _id: postId },
+        {
+          $pull: {
+            likes: userId,
+          },
+        }
+      );
       await User.updateOne({ _id: userId }, { $pull: { likedPosts: postId } });
 
       const updatedLikes = post.likes.filter(
@@ -248,15 +242,10 @@ export const getLikedPosts = async (req, res) => {
 
     const likedPosts = await Post.find({
       _id: { $in: user.likedPosts },
-    })
-      .populate({
-        path: "user",
-        select: "-password",
-      })
-      .populate({
-        path: "comments.user",
-        select: "-password",
-      });
+    }).populate({
+      path: "user",
+      select: "-password",
+    });
 
     res.status(200).json(likedPosts);
   } catch (error) {
@@ -283,7 +272,13 @@ export const getFollowingPosts = async (req, res) => {
         createdAt: -1,
       })
       .populate({ path: "user", select: "-password" })
-      .populate({ path: "comments.user", select: "-password" });
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user",
+          select: "_id username fullName profileImage",
+        },
+      });
 
     res.status(200).json(feedPosts);
   } catch (error) {
@@ -307,7 +302,13 @@ export const getUserPosts = async (req, res) => {
     const posts = await Post.find({ user: user._id })
       .sort({ createdAt: -1 })
       .populate({ path: "user", select: "-password" })
-      .populate({ path: "comments.user", select: "-password" });
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user",
+          select: "_id username fullName profileImage",
+        },
+      });
 
     res.status(200).json(posts);
   } catch (error) {
@@ -390,8 +391,11 @@ export const getBookmarkedPosts = async (req, res) => {
         select: "-password",
       })
       .populate({
-        path: "comments.user",
-        select: "-password",
+        path: "comments",
+        populate: {
+          path: "user",
+          select: "_id username fullName profileImage",
+        },
       });
 
     res.status(200).json(bookmarkedPosts);

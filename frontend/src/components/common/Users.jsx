@@ -42,7 +42,7 @@ const Users = () => {
                 <span className="font-semibold tracking-tight truncate w-28">
                   {user.fullName}
                 </span>
-                <span className="text-sm text-slate-500">@{user.username}</span>
+                <span className="text-sm">@{user.username}</span>
               </div>
             </div>
             <div>

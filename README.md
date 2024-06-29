@@ -6,8 +6,9 @@ Threadless is social media/art gallery that allows users to publish their artwor
 
 ### TODO:
 
+- [ ] **Refine the search page, allowing users to search for other users/artists alongside artwork and future events.**
+- [ ] Align the deleteComment icon to the far right.
+- [ ] Add the rest of the terms and conditions.
+- [ ] Check all controllers to fetch only the needed information - test in postman.
 - [ ] Implement a payment/checkout feature.
-- [ ] Refine the exhibitions page, using the same method for the PostPage and PostCard (maybe add diferent textbox and allow to upload more than one image).
-- [ ] Refine the search page, allowing users to search for other users/artists alongside artwork and future events.
-
-- [ ] Implement comment model, controller and route, to allow users to comment, delete the comments and recieve notifications.
+- [ ] Try to implement the Firebase Storage (might do it later).

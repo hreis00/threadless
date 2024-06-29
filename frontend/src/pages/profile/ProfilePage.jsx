@@ -104,7 +104,7 @@ const ProfilePage = () => {
                 </button>
                 <div className="flex flex-col">
                   <p className="text-lg font-bold">{user?.fullName}</p>
-                  <span className="text-sm text-slate-500">
+                  <span className="text-sm">
                     {0 || userPosts?.length} posts
                   </span>
                 </div>
@@ -189,18 +189,14 @@ const ProfilePage = () => {
               <div className="flex flex-col gap-4 px-4 mt-14">
                 <div className="flex flex-col">
                   <span className="text-lg font-bold">{user?.fullName}</span>
-                  <span className="text-sm text-slate-500">
-                    @{user?.username}
-                  </span>
+                  <span className="text-xs">@{user?.username}</span>
                   <span className="my-1 text-sm">{user?.bio}</span>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
                   <div className="flex items-center gap-2">
-                    <IoCalendarOutline className="w-4 h-4 text-slate-500" />
-                    <span className="text-sm text-slate-500">
-                      {memberSinceDate}
-                    </span>
+                    <IoCalendarOutline className="w-4 h-4" />
+                    <span className="text-sm">{memberSinceDate}</span>
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -208,13 +204,13 @@ const ProfilePage = () => {
                     <span className="text-xs font-bold">
                       {user?.following.length}
                     </span>
-                    <span className="text-xs text-slate-500">Following</span>
+                    <span className="text-xs">Following</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-xs font-bold">
                       {user?.followers.length}
                     </span>
-                    <span className="text-xs text-slate-500">Followers</span>
+                    <span className="text-xs">Followers</span>
                   </div>
                 </div>
               </div>

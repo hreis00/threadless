@@ -8,6 +8,7 @@ import userRoutes from "./routes/user.route.js";
 import postRoutes from "./routes/post.route.js";
 import exhibitionRoutes from "./routes/exhibition.route.js";
 import notificationRoutes from "./routes/notification.route.js";
+import commentRoutes from "./routes/comment.route.js";
 
 import connectMongoDB from "./db/connectMongoDB.js";
 
@@ -32,6 +33,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/exhibitions", exhibitionRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/comments", commentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

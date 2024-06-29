@@ -1,20 +1,15 @@
-import { Link } from "react-router-dom";
 import { useState } from "react";
-
-import { MdOutlineMail } from "react-icons/md";
-import { FaUser } from "react-icons/fa";
-import { MdPassword } from "react-icons/md";
-import { MdDriveFileRenameOutline } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useMutation } from "@tanstack/react-query";
 
-import { useNavigate } from "react-router-dom";
-
 import toast from "react-hot-toast";
+
 import ThreadlessLogo from "../../../components/svgs/ThreadlessLogo";
 import OAuth from "../../../components/common/OAuth";
 
-const RegisterPage = () => {
+const Register = () => {
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -64,80 +59,117 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex h-screen max-w-screen-xl px-10 mx-auto">
-      <div className="items-center justify-center flex-1 hidden lg:flex">
-        <ThreadlessLogo className="w-80 fill-primary" />
-      </div>
-      <div className="flex flex-col items-center justify-center flex-1">
-        <form
-          className="flex flex-col gap-4 mx-auto lg:w-2/3 md:mx-20"
-          onSubmit={handleSubmit}
-        >
-          <h1 className="text-4xl font-extrabold text-white">Start today.</h1>
-          <label className="flex items-center gap-2 rounded input input-bordered">
-            <MdOutlineMail />
-            <input
-              type="email"
-              className="grow"
-              placeholder="Email"
-              name="email"
-              onChange={handleInputChange}
-              value={formData.email}
-            />
-          </label>
-          <div className="flex flex-wrap gap-4">
-            <label className="flex items-center flex-1 gap-2 rounded input input-bordered">
-              <FaUser />
+    <div className="flex min-h-[100dvh] items-center mx-auto justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
+        <div>
+          <ThreadlessLogo className="w-[50%] mx-auto fill-primary" />
+          <h2 className="mt-6 text-3xl font-bold tracking-tight text-center text-foreground">
+            Sign up to Threadless
+          </h2>
+          <p className="mt-2 text-sm text-center text-muted-foreground">
+            Or{" "}
+            <Link
+              className="font-medium text-primary hover:text-primary/90"
+              to="/login"
+            >
+              login into your account
+            </Link>
+          </p>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-2 rounded-md shadow-sm">
+            <div>
+              <label
+                className="text-sm font-medium leading-none sr-only peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor="email"
+              >
+                Email
+              </label>
               <input
+                className="relative block w-full h-10 px-3 py-2 text-sm border border-b border-gray-300 rounded-md appearance-none bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-t-md text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+                id="email"
+                autoComplete="email"
+                required=""
+                type="email"
+                name="email"
+                placeholder="Email"
+                onChange={handleInputChange}
+                value={formData.email}
+              />
+            </div>
+            <div>
+              <label
+                className="text-sm font-medium leading-none sr-only peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor="username"
+              >
+                Username
+              </label>
+              <input
+                className="relative block w-full h-10 px-3 py-2 text-sm border border-b border-gray-300 rounded-md appearance-none bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-t-md text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+                id="username"
+                autoComplete="username"
+                required=""
                 type="text"
-                className="grow "
-                placeholder="Username"
                 name="username"
+                placeholder="Username"
                 onChange={handleInputChange}
                 value={formData.username}
               />
-            </label>
-            <label className="flex items-center flex-1 gap-2 rounded input input-bordered">
-              <MdDriveFileRenameOutline />
+            </div>
+            <div>
+              <label
+                className="text-sm font-medium leading-none sr-only peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor="fullName"
+              >
+                FullName
+              </label>
               <input
+                className="relative block w-full h-10 px-3 py-2 text-sm border border-b border-gray-300 rounded-md appearance-none bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-t-md text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+                id="fullName"
+                autoComplete="fullName"
+                required=""
                 type="text"
-                className="grow"
-                placeholder="Full Name"
                 name="fullName"
+                placeholder="Full Name"
                 onChange={handleInputChange}
                 value={formData.fullName}
               />
-            </label>
+            </div>
+            <div>
+              <label
+                className="text-sm font-medium leading-none sr-only peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                htmlFor="password"
+              >
+                Password
+              </label>
+              <input
+                className="relative block w-full h-10 px-3 py-2 text-sm border border-b border-gray-300 rounded-md appearance-none bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 rounded-b-md text-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+                id="password"
+                autoComplete="current-password"
+                required=""
+                type="password"
+                name="password"
+                placeholder="Password"
+                onChange={handleInputChange}
+                value={formData.password}
+              />
+            </div>
           </div>
-          <label className="flex items-center gap-2 rounded input input-bordered">
-            <MdPassword />
-            <input
-              type="password"
-              className="grow"
-              placeholder="Password"
-              name="password"
-              onChange={handleInputChange}
-              value={formData.password}
-            />
-          </label>
-          <button className="btn btn-base-300">
-            {isPending ? "Loading..." : "Sign up"}
-          </button>
-          <OAuth />
-          {isError && <p className="text-red-500">{error.message}</p>}
-        </form>
-        <div className="flex flex-col gap-2 mt-4 lg:w-2/3">
-          <p className="text-lg text-center text-white">
-            Already have an account?
-          </p>
-          <Link to="/login">
-            <button className="w-full btn btn-base-300 btn-outline">
-              Sign in
+          <div>
+            <button className="relative flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-medium transition-colors border border-transparent rounded-md whitespace-nowrap ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 group btn text-base-300 btn-outline bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+              {isPending ? "Loading..." : "Sign up"}
             </button>
-          </Link>
+          </div>
+        </form>
+        <div>
+          <OAuth />
+          {isError && (
+            <p className="p-2 text-center text-error">{error.message}</p>
+          )}
         </div>
       </div>
     </div>
   );
 };
-export default RegisterPage;
+
+export default Register;
