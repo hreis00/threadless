@@ -4,6 +4,8 @@ import { v2 as cloudinary } from "cloudinary";
 import User from "../models/user.model.js";
 import Notification from "../models/notification.model.js";
 import Exhibition from "../models/exhibition.model.js";
+import Post from "../models/post.model.js";
+import Comment from "../models/comment.model.js";
 
 // @desc    Get user profile
 // @route   POST /api/users/profile/:username
@@ -97,9 +99,11 @@ export const getSuggestedUsers = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     const userId = req.user._id;
+
     const users = await User.find({ _id: { $nin: userId } }).select(
-      "-password"
+      "-password -isAdmin"
     );
+
     res.status(200).json(users);
   } catch (error) {
     console.log("Error getting all users:", error.message);
@@ -114,14 +118,21 @@ export const searchUsers = async (req, res) => {
   try {
     const query = req.params.query;
     const userId = req.user._id;
+
     const users = await User.find({
-      $or: [
-        { fullName: { $regex: query, $options: "i" } },
-        { username: { $regex: query, $options: "i" } },
+      $and: [
+        {
+          $or: [
+            { fullName: { $regex: query, $options: "i" } },
+            { username: { $regex: query, $options: "i" } },
+          ],
+        },
+        { isAdmin: { $nin: true } },
       ],
     })
       .where({ _id: { $nin: userId } })
       .select("-password");
+
     res.status(200).json(users);
   } catch (error) {
     console.log("Error searching users:", error.message);
@@ -321,5 +332,31 @@ export const getEnrolledExhibitions = async (req, res) => {
   } catch (error) {
     console.log("Error getting enrolled exhibitions:", error.message);
     res.status(500).json({ error: error.message });
+  }
+};
+
+// @desc    Delete account
+// @route   DELETE /api/users/:id
+// @access  Private
+export const deleteAccount = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Find the user by id and delete the account
+    const user = await User.findByIdAndDelete(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    await Post.deleteMany({ user: userId });
+    await Comment.deleteMany({ user: userId });
+    await Notification.deleteMany({ from: userId, to: { $ne: userId } });
+    await Exhibition.deleteMany({ user: userId });
+
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    console.log("Error deleting account:", error.message);
+    res.status(500).json({ error: "Failed to delete account" });
   }
 };

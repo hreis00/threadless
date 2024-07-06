@@ -5,28 +5,6 @@ import Comment from "../models/comment.model.js";
 
 import { v2 as cloudinary } from "cloudinary";
 
-// @desc    Search posts
-// @route   GET /api/posts/search/:query
-// @access  Private
-export const searchPosts = async (req, res) => {
-  try {
-    const query = req.params.query;
-    const userId = req.user._id;
-    const posts = await Post.find({
-      $or: [
-        { fullName: { $regex: query, $options: "i" } },
-        { username: { $regex: query, $options: "i" } },
-        { text: { $regex: query, $options: "i" } },
-      ],
-    }).where({ _id: { $nin: userId } });
-
-    res.status(200).json(posts);
-  } catch (error) {
-    console.log("Error searching posts:", error.message);
-    res.status(500).json({ error: error.message });
-  }
-};
-
 // @desc    Get all posts
 // @route   GET /api/posts/all
 // @access  Private
@@ -44,6 +22,33 @@ export const getAllPosts = async (req, res) => {
     res.status(200).json(posts);
   } catch (error) {
     console.log("Error getting posts:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// @desc    Search posts
+// @route   GET /api/posts/search/:query
+// @access  Private
+export const searchPosts = async (req, res) => {
+  try {
+    const query = req.params.query;
+    const userId = req.user._id;
+    const posts = await Post.find({
+      $or: [
+        { fullName: { $regex: query, $options: "i" } },
+        { username: { $regex: query, $options: "i" } },
+        { name: { $regex: query, $options: "i" } },
+      ],
+    })
+      .where({ _id: { $nin: userId } })
+      .populate({
+        path: "user",
+        select: "_id username fullName profileImage",
+      });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.log("Error searching posts:", error.message);
     res.status(500).json({ error: error.message });
   }
 };

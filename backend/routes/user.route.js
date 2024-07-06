@@ -10,6 +10,7 @@ import {
   getEnrolledExhibitions,
   enrollExhibition,
   unenrollExhibition,
+  deleteAccount,
 } from "../controllers/user.controller.js";
 
 const router = express.Router();
@@ -23,5 +24,7 @@ router.post("/enroll/:id", protectRoute, enrollExhibition);
 router.post("/follow/:id", protectRoute, followUnfollowUser);
 router.post("/update", protectRoute, updateUserProfile);
 router.post("/unenroll/:id", protectRoute, unenrollExhibition);
+// TODO: Implement in the frontend
+router.delete("/:id", protectRoute, deleteAccount);
 
 export default router;
