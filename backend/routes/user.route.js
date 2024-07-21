@@ -25,6 +25,6 @@ router.post("/follow/:id", protectRoute, followUnfollowUser);
 router.post("/update", protectRoute, updateUserProfile);
 router.post("/unenroll/:id", protectRoute, unenrollExhibition);
 // TODO: Implement in the frontend
-router.delete("/:id", protectRoute, deleteAccount);
+router.delete("/deleteAccount", protectRoute, deleteAccount);
 
 export default router;

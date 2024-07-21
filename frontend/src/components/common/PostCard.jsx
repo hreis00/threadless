@@ -189,7 +189,7 @@ const Post = ({ post }) => {
             >
               <FaComment className="w-4 h-4 group-hover:text-sky-400" />
               <span className="text-sm group-hover:text-sky-400">
-                {post.comments.length}
+                {post?.comments.length}
               </span>
             </div>
             {/* Like */}

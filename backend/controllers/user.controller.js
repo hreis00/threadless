@@ -335,24 +335,48 @@ export const getEnrolledExhibitions = async (req, res) => {
   }
 };
 
+// TODO: Delete comment from comment array inside post
 // @desc    Delete account
-// @route   DELETE /api/users/:id
+// @route   DELETE /api/users/deleteAccount
 // @access  Private
 export const deleteAccount = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    // Find the user by id and delete the account
     const user = await User.findByIdAndDelete(userId);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
+    // Find the user's comments
+    const userComments = await Comment.find({ user: userId });
+
+    // Retrieve the comment IDs
+    const commentIds = userComments.map((comment) => comment._id);
+
+    // Update the posts to remove the user's comments by comment ID
+    await Post.updateMany(
+      { "comments.commentId": { $in: commentIds } },
+      { $pull: { comments: { commentId: { $in: commentIds } } } }
+    );
+
+    // Delete user posts
     await Post.deleteMany({ user: userId });
+
+    // Delete user likes
+    await Post.updateMany({ likes: userId }, { $pull: { likes: userId } });
+
+    // Delete user comments
     await Comment.deleteMany({ user: userId });
+
+    // Delete user notifications
     await Notification.deleteMany({ from: userId, to: { $ne: userId } });
+
+    // Delete user exhibtions
     await Exhibition.deleteMany({ user: userId });
+
+    res.cookie("jwt", "", { maxAge: 0 });
 
     res.status(200).json({ message: "Account deleted successfully" });
   } catch (error) {

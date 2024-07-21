@@ -17,6 +17,7 @@ import ExhibitionPage from "./pages/exhibition/ExhibitionPage";
 import ExhibitionsPage from "./pages/exhibition/ExhibitionsPage";
 import PostPage from "./pages/post/PostPage";
 import TermsAndConditions from "./pages/terms and conditions/TermsAndConditions";
+import SettingsPage from "./pages/settings/SettingsPage";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -88,6 +89,10 @@ function App() {
         <Route
           path="/terms-and-conditions"
           element={authUser ? <TermsAndConditions /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/settings"
+          element={authUser ? <SettingsPage /> : <Navigate to="/login" />}
         />
       </Routes>
       {/* {authUser && <RightPanel />} */}

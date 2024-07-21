@@ -392,7 +392,7 @@ const PostPage = () => {
                           <span className="flex justify-end flex-1">
                             {!isDeletingComment && (
                               <FaTrash
-                                className="cursor-pointer hover:text-red-500"
+                                className="cursor-pointer hover:text-red-500 size-3"
                                 onClick={() =>
                                   handleDeleteComment(comment?._id)
                                 }

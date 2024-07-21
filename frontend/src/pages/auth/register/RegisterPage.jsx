@@ -18,6 +18,7 @@ const Register = () => {
   });
 
   const navigate = useNavigate();
+
   const { mutate, isError, isPending, error } = useMutation({
     mutationFn: async ({ email, username, fullName, password }) => {
       try {

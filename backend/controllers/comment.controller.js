@@ -21,14 +21,14 @@ export const commentPost = async (req, res) => {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    const newComment = new Comment({
+    const comment = new Comment({
       text,
       user: userId,
       post: postId,
     });
 
-    await newComment.save();
-    post.comments.push(newComment._id);
+    await comment.save();
+    post.comments.push(comment._id);
     await post.save();
 
     const newNotification = new Notification({
@@ -39,7 +39,7 @@ export const commentPost = async (req, res) => {
 
     await newNotification.save();
 
-    res.status(201).json(newComment);
+    res.status(201).json(comment);
   } catch (error) {
     console.log("Error commenting post:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -82,10 +82,14 @@ export const deleteComment = async (req, res) => {
       _id: commentId,
     });
 
-    const post = await Post.findById(postId);
-
     if (!comment) {
       return res.status(404).json({ error: "Comment not found" });
+    }
+
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
     }
 
     post.comments.pull(comment._id);

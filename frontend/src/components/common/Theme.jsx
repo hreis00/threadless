@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
 import { themeChange } from "theme-change";
 
-import { MdContrast } from "react-icons/md";
-
 const Theme = () => {
   const [selectedTheme, setSelectedTheme] = useState("");
-  const isAuthenticated = false;
+
+  const handleThemeChange = (event) => {
+    const theme = event.target.value;
+    const isChecked = event.target.checked;
+
+    if (isChecked) {
+      setSelectedTheme(theme);
+      themeChange(theme);
+      localStorage.setItem("selectedTheme", theme);
+    }
+  };
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("selectedTheme");
@@ -15,39 +23,47 @@ const Theme = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      const savedTheme = localStorage.getItem("selectedTheme");
-      if (savedTheme) {
-        setSelectedTheme(savedTheme);
-        themeChange(savedTheme);
-      }
-    }
-  }, [isAuthenticated]);
-
-  const handleThemeChange = (event) => {
-    const selectedTheme = event.target.value;
-    setSelectedTheme(selectedTheme);
-    themeChange(selectedTheme);
-    localStorage.setItem("selectedTheme", selectedTheme);
-  };
-
   return (
-    <div className="flex flex-col items-center transition-all duration-300 rounded-full md:flex-row max-w-fit">
-      <div className="py-2 md:pl-2 md:pr-3">
-        <MdContrast className="w-8 h-8" />
+    <div className="flex items-center gap-2 p-2 transition-all duration-300 rounded-full max-w-fit">
+      <p>Choose the theme you want to use</p>
+      <div className="flex gap-2 ">
+        <div>
+          <label className="flex gap-2 p-2 overflow-hidden border rounded-lg cursor-pointer bg-base-100 border-base-content/20 outline outline-2 outline-offset-2 outline-transparent">
+            <input
+              type="radio"
+              value="light"
+              className="self-center theme-controller"
+              checked={selectedTheme === "light"}
+              onChange={handleThemeChange}
+            />
+            <div className="font-bold">Light</div>
+          </label>
+        </div>
+        <div>
+          <label className="flex gap-2 p-2 overflow-hidden border rounded-lg cursor-pointer bg-base-100 border-base-content/20 outline outline-2 outline-offset-2 outline-transparent">
+            <input
+              type="radio"
+              value="dark"
+              className="self-center theme-controller"
+              checked={selectedTheme === "dark"}
+              onChange={handleThemeChange}
+            />
+            <div className="font-bold">Dark</div>
+          </label>
+        </div>
+        <div>
+          <label className="flex gap-2 p-2 overflow-hidden border rounded-lg cursor-pointer border-base-content/20 outline outline-2 outline-offset-2 outline-transparent">
+            <input
+              type="radio"
+              value="dracula"
+              className="self-center theme-controller"
+              checked={selectedTheme === "dracula"}
+              onChange={handleThemeChange}
+            />
+            <div className="font-bold">Dracula</div>
+          </label>
+        </div>
       </div>
-      <select
-        className="py-1 rounded outline-none bg-base-300"
-        data-choose-theme
-        value={selectedTheme}
-        onChange={handleThemeChange}
-        title="Choose a theme"
-      >
-        <option value="dark">Default</option>
-        <option value="light">Light</option>
-        <option value="dracula">Dracula</option>
-      </select>
     </div>
   );
 };

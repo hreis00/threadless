@@ -9,10 +9,10 @@ import {
   MdOutlineLogout,
   MdMuseum,
   MdOutlineContentCopy,
+  MdOutlineSettings,
 } from "react-icons/md";
 
 import toast from "react-hot-toast";
-import Theme from "./Theme";
 
 import Threadless from "../svgs/ThreadlessLogo";
 import ThreadlessIcon from "../svgs/ThreadlessLogoIcon";
@@ -108,7 +108,13 @@ const Sidebar = () => {
             </Link>
           </li>
           <li className="flex justify-center md:justify-start">
-            <Theme />
+            <Link
+              to={`/settings`}
+              className="flex items-center gap-3 py-2 transition-all duration-300 rounded-full cursor-pointer md:pr-4 md:pl-2 hover:bg-base-300 max-w-fit"
+            >
+              <MdOutlineSettings className="w-8 h-8" />
+              <span className="hidden text-lg md:block">Settings</span>
+            </Link>
           </li>
         </ul>
         {authUser && (
