@@ -98,11 +98,27 @@ const Exhibition = ({ exhibition }) => {
           <div className="flex flex-col items-start gap-2 border-gray-700">
             <div className="flex flex-col w-full gap-2 ">
               <span className="flex items-center gap-2">
-                <span className="font-bold w-fit">{exhibition.name}</span>
-                <span className="flex gap-1 text-xs w-fit">
-                  <span>·</span>
-                  <span>{formattedExhibitionDate}</span>
-                </span>
+                {(authUser && authUser.isAdmin) ||
+                exhibition.enrolledUsers.includes(authUser._id) ? (
+                  <Link
+                    to={`/exhibition/${exhibition.slug}`}
+                    className="flex items-center gap-2"
+                  >
+                    <span className="font-bold w-fit">{exhibition.name}</span>
+                    <span className="flex gap-1 text-xs w-fit">
+                      <span>·</span>
+                      <span>{formattedExhibitionDate}</span>
+                    </span>
+                  </Link>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <span className="font-bold w-fit">{exhibition.name}</span>
+                    <span className="flex gap-1 text-xs w-fit">
+                      <span>·</span>
+                      <span>{formattedExhibitionDate}</span>
+                    </span>
+                  </span>
+                )}
 
                 {/* Delete exhibition - ADMIN */}
                 {authUser && authUser.isAdmin && (
@@ -154,7 +170,7 @@ const Exhibition = ({ exhibition }) => {
           </div>
 
           {/* Link to exhibition page if admin or enrolled */}
-          {(authUser && authUser.isAdmin) ||
+          {/* {(authUser && authUser.isAdmin) ||
           exhibition.enrolledUsers.includes(authUser._id) ? (
             <Link to={`/exhibition/${exhibition.slug}`}>
               <div className="py-2 space-y-4">
@@ -179,7 +195,7 @@ const Exhibition = ({ exhibition }) => {
                 />
               )}
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </>
