@@ -151,7 +151,7 @@ export const google = async (req, res) => {
           name.toLowerCase().split(" ").join("") +
           Math.random().toString(9).slice(-4),
         email,
-        profilePicture: googlePhotoUrl,
+        profileImage: googlePhotoUrl,
         fullName: name,
         password: hashedPassword,
       });
@@ -164,6 +164,7 @@ export const google = async (req, res) => {
         email: newUser.email,
         followers: newUser.followers,
         following: newUser.following,
+        profileImage: newUser.profileImage
       });
     }
   } catch (error) {

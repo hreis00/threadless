@@ -24,15 +24,18 @@ function App() {
     queryKey: ["authUser"],
     queryFn: async () => {
       try {
-        const res = await fetch("/api/auth/me");
+        const res = await fetch("/api/auth/me", {
+          credentials: 'include'
+        });
         const data = await res.json();
-        if (data.error) return null;
+        if (data.error) throw new Error(data.error);
 
         if (!res.ok) throw new Error(data.error || "Something went wrong");
 
         return data;
       } catch (error) {
-        throw new Error(error);
+        console.error("Auth check error:", error);
+        return null;
       }
     },
     retry: false,
@@ -40,7 +43,7 @@ function App() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex justify-center items-center h-screen">
         <LoadingSpinner size="lg" />
       </div>
     );
