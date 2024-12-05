@@ -2,6 +2,23 @@ import { generateTokenAndSetCookie } from "../lib/utils/generateToken.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import mongoose from "mongoose";
+import crypto from 'crypto';
+
+// Helper function for generating secure random strings
+const generateSecureString = (length = 32) => {
+  return crypto
+    .randomBytes(Math.ceil(length / 2))
+    .toString('hex')
+    .slice(0, length);
+};
+
+// Helper function for generating secure usernames
+const generateSecureUsername = (baseName) => {
+  const randomSuffix = crypto
+    .randomBytes(4)
+    .toString('hex');
+  return `${baseName}${randomSuffix}`;
+};
 
 // @desc    Register user
 // @route   POST /api/auth/register
@@ -176,20 +193,20 @@ export const google = async (req, res) => {
       });
     }
 
-    // Generate a secure random password
-    const generatePassword = await bcrypt.hash(Math.random().toString(36) + Date.now().toString(), 10);
+    // Generate a secure random password using crypto
+    const securePassword = generateSecureString(32);
+    const hashedPassword = await bcrypt.hash(securePassword, 10);
     
-    // Generate a unique username
+    // Generate a secure username
     const baseUsername = name.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const randomSuffix = Math.random().toString(36).substring(2, 6);
-    const username = `${baseUsername}${randomSuffix}`;
+    const username = generateSecureUsername(baseUsername);
 
     const newUser = new User({
       username,
       email: email.toLowerCase(),
       profileImage: googlePhotoUrl,
       fullName: name,
-      password: generatePassword,
+      password: hashedPassword,
     });
 
     await newUser.save();
