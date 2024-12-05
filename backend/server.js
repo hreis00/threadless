@@ -1,8 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import { v2 as cloudinary } from "cloudinary";
 import cors from 'cors';
+import { v2 as cloudinary } from "cloudinary";
+import connectMongoDB from "./db/connectMongoDB.js";
+import { csrfProtection, handleCSRFError } from "./middleware/csrfProtection.js";
 
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
@@ -10,8 +12,6 @@ import postRoutes from "./routes/post.route.js";
 import exhibitionRoutes from "./routes/exhibition.route.js";
 import notificationRoutes from "./routes/notification.route.js";
 import commentRoutes from "./routes/comment.route.js";
-
-import connectMongoDB from "./db/connectMongoDB.js";
 
 dotenv.config();
 
@@ -33,6 +33,15 @@ app.use(cors({
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
+
+// CSRF protection - must be after cookie-parser and before routes
+app.use(csrfProtection);
+app.use(handleCSRFError);
+
+// CSRF token endpoint
+app.get('/api/csrf-token', (req, res) => {
+  res.json({ csrfToken: req.csrfToken() });
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);

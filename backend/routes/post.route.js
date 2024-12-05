@@ -13,8 +13,12 @@ import {
   getBookmarkedPosts,
   getPostById,
 } from "../controllers/post.controller.js";
+import { apiLimiter, postLimiter } from "../middleware/rateLimiter.js";
 
 const router = express.Router();
+
+// Apply general rate limiting to all routes
+router.use(apiLimiter);
 
 router.get("/all", protectRoute, getAllPosts);
 router.get("/post/:id", protectRoute, getPostById);
@@ -23,9 +27,9 @@ router.get("/following", protectRoute, getFollowingPosts);
 router.get("/likes/:id", protectRoute, getLikedPosts);
 router.get("/bookmarks/:id", protectRoute, getBookmarkedPosts);
 router.get("/user/:username", protectRoute, getUserPosts);
-router.post("/create", protectRoute, createPost);
+router.post("/create", protectRoute, postLimiter, createPost);
 router.post("/like/:id", protectRoute, likeUnlikePost);
 router.post("/bookmark/:id", protectRoute, bookmarkUnbookmarkPost);
-router.delete("/:id", protectRoute, deletePost);
+router.delete("/:id", protectRoute, postLimiter, deletePost);
 
 export default router;

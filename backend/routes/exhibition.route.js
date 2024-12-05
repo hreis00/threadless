@@ -7,8 +7,11 @@ import {
   getExhibitionBySlug,
 } from "../controllers/exhibition.controller.js";
 import { protectRoute } from "../middleware/protectRoute.js";
+import { apiLimiter } from "../middleware/rateLimiter.js";
 
 const router = express.Router();
+
+router.use(apiLimiter);
 
 router.get("/all", protectRoute, getAllExhibitions);
 router.get("/:slug", protectRoute, getExhibitionBySlug);

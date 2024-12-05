@@ -5,14 +5,18 @@ import {
   deleteComment,
   getPostComments,
 } from "../controllers/comment.controller.js";
+import { apiLimiter, commentLimiter } from "../middleware/rateLimiter.js";
 
 const router = express.Router();
 
-// Route to comment on a post
-router.post("/:id", protectRoute, commentPost);
+// Apply general rate limiting to all routes
+router.use(apiLimiter);
 
-// Route to delete a comment
-router.delete("/:postId/:commentId", protectRoute, deleteComment);
+// Route to comment on a post with stricter limits
+router.post("/:id", protectRoute, commentLimiter, commentPost);
+
+// Route to delete a comment with stricter limits
+router.delete("/:postId/:commentId", protectRoute, commentLimiter, deleteComment);
 
 // Route to get comments of a post
 router.get("/:id", protectRoute, getPostComments);

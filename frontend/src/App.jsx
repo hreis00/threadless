@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { useEffect } from 'react';
 
 import HomePage from "./pages/home/HomePage";
 import RegisterPage from "./pages/auth/register/RegisterPage";
@@ -18,6 +19,7 @@ import ExhibitionsPage from "./pages/exhibition/ExhibitionsPage";
 import PostPage from "./pages/post/PostPage";
 import TermsAndConditions from "./pages/terms and conditions/TermsAndConditions";
 import SettingsPage from "./pages/settings/SettingsPage";
+import { setupCSRFToken } from './utils/csrf';
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -40,6 +42,11 @@ function App() {
     },
     retry: false,
   });
+
+  useEffect(() => {
+    // Initialize CSRF protection
+    setupCSRFToken();
+  }, []);
 
   if (isLoading) {
     return (
